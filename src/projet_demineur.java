@@ -122,12 +122,6 @@ public class projet_demineur {
 			}
 		}
 		System.out.println();
-<<<<<<< Updated upstream
-
-
-		//============================================
-=======
->>>>>>> Stashed changes
 		//Affichage lignes
 		int unité = 0;
 		int dizaine = 0;
