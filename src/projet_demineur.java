@@ -23,6 +23,7 @@
 
 // Pour utiliser des scanners pour lire des entrées depuis le clavier
 // utilisés en questions 4.d] pour la fonction jeu()
+import java.io.IOException;
 import java.util.Scanner;
 
 // Pour la fonction entierAleatoire(a, b) que l'on vous donne ci-dessous
@@ -163,4 +164,18 @@ public class projet_demineur {
 		
 	}
 
+
+
+	// As taken from
+    // https://stackoverflow.com/questions/2979383/java-clear-the-console
+    public static void clearScreen() {
+        try {
+            if (System.getProperty("os.name").contains("Windows")) {
+                new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+            } else {
+                System.out.print("\033\143");
+            }
+        } catch (IOException | InterruptedException ex) {
+        }
+    }
 }
