@@ -44,7 +44,7 @@ public class projet_demineur {
 	//
 
 	// Question 1.a] déclarez les variables globales T et Tadj ici
-	static char[][] T; //Voici les variables globale
+	static int[][] T; //Voici les variables globale
 	static int[][] Tadj;
 	
 
@@ -53,7 +53,7 @@ public class projet_demineur {
 	static void init(int hauteur, int largeur, int n) { // ATTENTION, vous devez modifier la signature de cette fonction
 		
 		Tadj = new int[hauteur][largeur]; // initialisation de Tadj
-		T = new char[hauteur][largeur]; // initialisation de T
+		T = new int[hauteur][largeur]; // initialisation de T
 		for(int i = 0; i < n; i++) { //cette boucle for va placer des bombes aléatoirement dans Tadj
 			int bombeL = entierAleatoire(0, largeur);
 			int bombeH = entierAleatoire(0, hauteur);
@@ -126,7 +126,7 @@ public class projet_demineur {
 		}
 		System.out.println();
 
-		
+
 		//============================================
 		//Affichage lignes
 		int unité = 0;
@@ -145,12 +145,18 @@ public class projet_demineur {
 			
 			//affiche reste
 			for ( int j = 0; j < T[i].length; j++) {
-				if (T[i][j] == 0) {
-					System.out.print((char)32+" | ");
-				} else if (T[i][j] == 1) {
-					System.out.print(Tadj[i][j] +" | ");
+				if (!affMines) {
+					if (T[i][j] == 0) {
+						System.out.print((char)32+" | ");
+					} else if (T[i][j] == 1) {
+						if (Tadj[i][j] == -1) System.out.print(Tadj[i][j] +"| ");
+						else System.out.print(Tadj[i][j] +" | ");
+					} else {
+						System.out.print("X"+" | ");
+					}
 				} else {
-					System.out.print("X"+" | ");
+					if (Tadj[i][j] == -1) System.out.print(Tadj[i][j] +"| ");
+					else System.out.print(Tadj[i][j] +" | ");
 				}
 			}
 			
