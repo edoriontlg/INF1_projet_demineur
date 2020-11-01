@@ -23,7 +23,6 @@
 
 // Pour utiliser des scanners pour lire des entrées depuis le clavier
 // utilisés en questions 4.d] pour la fonction jeu()
-import java.io.IOException;
 import java.util.Scanner;
 
 // Pour la fonction entierAleatoire(a, b) que l'on vous donne ci-dessous
@@ -35,7 +34,7 @@ public class projet_demineur {
 	// Donné, utile pour la question 1.b]
 	public static int entierAleatoire(int a, int b){
 		// Renvoie un entier aléatoire uniforme entre a (inclus) et b (inclus).
-		return ThreadLocalRandom.current().nextInt(a, b + 1);
+		return ThreadLocalRandom.current().nextInt(a, b-1);
 	}
 
 
@@ -44,23 +43,62 @@ public class projet_demineur {
 	//
 
 	// Question 1.a] déclarez les variables globales T et Tadj ici
-	static int[][] T; //Voici les variables globale
+	static char[][] T; //Voici les variables globale
 	static int[][] Tadj;
+	
+
 
 	// Question 1.b] Fonction init
-	public static void init() { // ATTENTION, vous devez modifier la signature de cette fonction
+	static void init(int hauteur, int largeur, int n) { // ATTENTION, vous devez modifier la signature de cette fonction
 		
-	
+		Tadj = new int[hauteur][largeur]; // initialisation de Tadj
+		T = new char[hauteur][largeur]; // initialisation de T
+		for(int i = 0; i < n; i++) { //cette boucle for va placer des bombes aléatoirement dans Tadj
+			int bombeL = entierAleatoire(0, largeur);
+			int bombeH = entierAleatoire(0, hauteur);
+			if (Tadj[bombeH][bombeL] != -1)Tadj[bombeH][bombeL] = -1;	// ce if evite qu'il y ai moins de bombes que prévu, si 2 bombes se trouvent au meme endroits
+			else n++;
+		}
+		for ( int j = 0; j < hauteur; j ++) { // cette boucle place les 0 sur toutes les autres cases de Tabj
+			for ( int k = 0; k < largeur; k ++) {
+				if (Tadj[j][k] != -1) Tadj[j][k]= 0;
+			}
+		}
 	}
 
-	// Question 1.c] Fonction caseCorrecte
-	public static void caseCorrecte() { // ATTENTION, vous devez modifier la signature de cette fonction)
+	
+	static void afficheTabj (int hauteur,int largeur) { //fonction qui va afficher Tabj
+		for ( int j = 0; j < hauteur; j ++) {
+			for ( int k = 0; k < largeur; k ++) {
+				if (Tadj[j][k]!=-1) System.out.print(" "+Tadj[j][k]+" ");			
+				else System.out.print(Tadj[j][k]+" ");	
+			}
+			System.out.println();
+
+		}
+	}
+	
 		
+	// Question 1.c] Fonction caseCorrecte
+	static boolean caseCorrecte(int i, int j) { // ATTENTION, vous devez modifier la signature de cette fonction)
+		return i < Tadj.length && j < Tadj[0].length && i >= 0 && j >= 0; // rempli les conditions que i et j doivent etre compris entre 0 (inclu) et longueur ou largeur (non inclu)
 	}
 
 	// Question 1.d] Fonction calculerAdjacent
-	public static void calculerAdjacent() {
-		
+	static void calculerAdjacent() {
+		for ( int i = 0; i < Tadj.length; i++) {
+			for ( int j = 0; j< Tadj[0].length; j++) { //ces 2 boucles for servent à scrupter pour chaques cases du tableau
+				if (Tadj[i][j]!=-1) { //ce if vérifie que la case en question n'est pas une bombe
+					for (int k = i-1; k <= i+1; k++) {
+						for ( int z = j-1; z <= j+1; z++) { // ces 2 boucles for vont scrupter toutes les cases autour de la case à vérifier ( 1 case en diagonal et une 1 case de haut en bas et de droite a gauche )
+							if ( caseCorrecte(k,z)) { //c'est un if important, pour les cases se trouvant en bordure ou en coin de Tadj, pour eviter que k et z soient égal a -1 ou a tadj.length
+								if ( Tadj[k][z]== -1) Tadj[i][j]++; // si une des cases à coté de la case à vérifier est une bombe, alors elle sera incrémentée de 1
+							}
+						}
+					}			
+				}
+			}
+		}		
 	}
 
 	//
@@ -68,11 +106,60 @@ public class projet_demineur {
 	//
 
 	// Question 2.a]
-	public static void afficherGrille() { // ATTENTION, vous devez modifier la signature de cette fonction
-
-		// Note : Dans un premier temps, considérer que la grille contiendra au plus 52 colonnes
-		// (une pour chaque lettre de l'alphabet en majuscule et minuscule) et au plus 100 lignes
-		// (entiers de 0 à 99).
+	static void afficherGrille(boolean affMines) { // ATTENTION, vous devez modifier la signature de cette fonction
+		
+		
+		//===========================================
+		//Affichage ligne 0
+		int lettres = 65;
+		System.out.print("  | ");
+		for ( int i = 0; i<T[0].length; i ++) {
+			if (i!=25 && i< 53) {
+				System.out.print((char)lettres+" | ");
+				lettres++;
+			}
+			else if ( i == 25) {
+				System.out.print((char)lettres+" | ");
+				lettres = lettres + 7;
+			}
+		}
+		System.out.println();
+		//============================================
+		//Affichage lignes
+		int unité = 0;
+		int dizaine = 0;
+		
+		for (int i = 0; i < T.length; i++) {
+			
+			//affichage 0	
+			if ( unité > 9) {
+				unité = 0;
+				dizaine++;
+			}
+			
+			System.out.print(dizaine+""+unité+"| ");
+			unité++;
+			
+			//affiche reste
+			for ( int j = 0; j < T[i].length; j++) {
+				T[i][j] = (char)32;
+				System.out.print(T[i][j]+" | ");
+			}
+			
+			
+							
+					
+			
+			
+			System.out.println();		
+		}
+						
+		
+		
+			
+			
+		
+		
 	}
 
 
@@ -140,8 +227,18 @@ public class projet_demineur {
 	// Question 4.e]
 	// Votre *unique* méthode main
 	public static void main(String[] args) {
+		int largeur = 10; // initialisation de la hauteur et la largeur des 
+		int hauteur = 10;
+		int n = 16;
 		
-
+		init (hauteur, largeur, n);
+		calculerAdjacent();
+		//afficheTabj(hauteur, largeur);
+		
+		
+		
+		afficherGrille(true);
+		
 	}
 
 
@@ -164,18 +261,4 @@ public class projet_demineur {
 		
 	}
 
-
-
-	// As taken from
-    // https://stackoverflow.com/questions/2979383/java-clear-the-console
-    public static void clearScreen() {
-        try {
-            if (System.getProperty("os.name").contains("Windows")) {
-                new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
-            } else {
-                System.out.print("\033\143");
-            }
-        } catch (IOException | InterruptedException ex) {
-        }
-    }
 }
