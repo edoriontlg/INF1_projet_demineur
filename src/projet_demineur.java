@@ -108,10 +108,7 @@ public class projet_demineur {
 
 	// Question 2.a]
 	static void afficherGrille(boolean affMines) { // ATTENTION, vous devez modifier la signature de cette fonction
-		
-		
-		//===========================================
-		//Affichage ligne 0
+		//affichage ligne 0
 		int lettres = 65;
 		System.out.print("  | ");
 		for ( int i = 0; i<T[0].length; i ++) {
@@ -125,24 +122,23 @@ public class projet_demineur {
 			}
 		}
 		System.out.println();
+<<<<<<< Updated upstream
 
 
 		//============================================
+=======
+>>>>>>> Stashed changes
 		//Affichage lignes
 		int unité = 0;
 		int dizaine = 0;
-		
-		for (int i = 0; i < T.length; i++) {
-			
+		for (int i = 0; i < T.length; i++) {		
 			//affichage 0	
 			if ( unité > 9) {
 				unité = 0;
 				dizaine++;
-			}
-			
+			}	
 			System.out.print(dizaine+""+unité+"| ");
-			unité++;
-			
+			unité++;	
 			//affiche reste
 			for ( int j = 0; j < T[i].length; j++) {
 				if (!affMines) {
