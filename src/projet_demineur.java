@@ -1,3 +1,18 @@
+// Bonjour Rémi
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // Ceci est un squelette à REMPLIR pour le projet INF1 sur le jeu de démineur
 //
 // - N'oubliez pas de renseigner vos deux noms
