@@ -125,6 +125,8 @@ public class projet_demineur {
 			}
 		}
 		System.out.println();
+
+		
 		//============================================
 		//Affichage lignes
 		int unité = 0;
@@ -143,8 +145,13 @@ public class projet_demineur {
 			
 			//affiche reste
 			for ( int j = 0; j < T[i].length; j++) {
-				T[i][j] = (char)32;
-				System.out.print(T[i][j]+" | ");
+				if (T[i][j] == 0) {
+					System.out.print((char)32+" | ");
+				} else if (T[i][j] == 1) {
+					System.out.print(Tadj[i][j] +" | ");
+				} else {
+					System.out.print("X"+" | ");
+				}
 			}
 			
 			
