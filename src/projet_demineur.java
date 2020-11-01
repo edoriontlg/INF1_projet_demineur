@@ -23,6 +23,7 @@
 
 // Pour utiliser des scanners pour lire des entrées depuis le clavier
 // utilisés en questions 4.d] pour la fonction jeu()
+import java.io.IOException;
 import java.util.Scanner;
 
 // Pour la fonction entierAleatoire(a, b) que l'on vous donne ci-dessous
@@ -56,7 +57,7 @@ public class projet_demineur {
 		for(int i = 0; i < n; i++) { //cette boucle for va placer des bombes aléatoirement dans Tadj
 			int bombeL = entierAleatoire(0, largeur);
 			int bombeH = entierAleatoire(0, hauteur);
-			if (Tadj[bombeH][bombeL] != -1)Tadj[bombeH][bombeL] = -1;	// ce if evite qu'il y ai moins de bombes que prévu, si 2 bombes se trouvent au meme endroits
+			if (Tadj[bombeH][bombeL] != -1) Tadj[bombeH][bombeL] = -1;	// ce if evite qu'il y ai moins de bombes que prévu, si 2 bombes se trouvent au meme endroits
 			else n++;
 		}
 		for ( int j = 0; j < hauteur; j ++) { // cette boucle place les 0 sur toutes les autres cases de Tabj
@@ -91,9 +92,9 @@ public class projet_demineur {
 				if (Tadj[i][j]!=-1) { //ce if vérifie que la case en question n'est pas une bombe
 					for (int k = i-1; k <= i+1; k++) {
 						for ( int z = j-1; z <= j+1; z++) { // ces 2 boucles for vont scrupter toutes les cases autour de la case à vérifier ( 1 case en diagonal et une 1 case de haut en bas et de droite a gauche )
-							if ( caseCorrecte(k,z)) { //c'est un if important, pour les cases se trouvant en bordure ou en coin de Tadj, pour eviter que k et z soient égal a -1 ou a tadj.length
-								if ( Tadj[k][z]== -1) Tadj[i][j]++; // si une des cases à coté de la case à vérifier est une bombe, alors elle sera incrémentée de 1
-							}
+							
+							if ( caseCorrecte(k,z) && Tadj[k][z]== -1) Tadj[i][j]++; //c'est un if important, pour les cases se trouvant en bordure ou en coin de Tadj, pour eviter que k et z soient égal a -1 ou a tadj.length
+								 // si une des cases à coté de la case à vérifier est une bombe, alors elle sera incrémentée de 1
 						}
 					}			
 				}
