@@ -119,16 +119,16 @@ public class projet_demineur {
 		}
 		System.out.println();
 		//Affichage lignes
-		int unité = 0;
+		int unite = 0;
 		int dizaine = 0;	
 		for (int i = 0; i < T.length; i++) {	
 			//affichage 0	
-			if ( unité > 9) {
-				unité = 0;
+			if ( unite > 9) {
+				unite = 0;
 				dizaine++;
 			}
-			System.out.print(dizaine+""+unité+"|");
-			unité++;
+			System.out.print(dizaine+""+unite+"|");
+			unite++;
 			//affiche reste
 			for ( int j = 0; j < T[i].length; j++) {
 				if (affMines) {
