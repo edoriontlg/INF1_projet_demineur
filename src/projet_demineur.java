@@ -281,23 +281,22 @@ public class projet_demineur {
 				break;
 			}
 			afficherGrille(true);
-			System.out.print("entrez votre action et vos coordonnées ");
+			System.out.print("entrez votre action et vos coordonnées : ");
 			String coord = sc.nextLine();		
 			if (!verifierFormat(coord)) {
-				System.out.print("ré entrez votre action et vos coordonnées, elles sont fausses ");
+				System.out.print("ré entrez votre action et vos coordonnées, (elles sont fausses): ");
 				coord = sc.nextLine();
 			}
-			else {
-				int[]coord2 = conversionCoordonnees(coord);
-				if (coord2[2]==0) {
-					actionDrapeau(coord2[0],coord2[1]);
-					T[coord2[0]][coord2[1]] = 2;
+			
+			int[]coord2 = conversionCoordonnees(coord);
+			if (coord2[2]==0) {
+				actionDrapeau(coord2[0],coord2[1]);
+				T[coord2[0]][coord2[1]] = 2;
 					
 				}
-				else {					
+			else {					
 					pasPerdu = revelerCase(coord2[0],coord2[1]);
-				}				
-			}
+			}							
 		}
 		if(aGagne()) {
 			afficherGrille(true);
@@ -334,19 +333,12 @@ public class projet_demineur {
 		if ( n>hauteur*largeur||n<1) {
 			System.out.print("ré-entrez le nombre de mines. Il doit etre compris entre 1 et "+largeur*hauteur+"inclus. ");
 			 n = scanner.nextInt();
-		}
-		
+		}		
 		init (hauteur, largeur, n);
 		calculerAdjacent();
-		
-		for ( int j = 0; j < hauteur; j ++) {
-			for ( int k = 0; k < largeur; k ++) {			
-				System.out.print(T[j][k]+" ");	
-			}
-			System.out.println();
-		}
-		jeu();
-		
+		System.out.println("Action : r ( revele ), d ( met un drapeau). Coordonnées : lignes( 00,01,02,...), colonnes ( A,B,C...z");
+		System.out.println();
+		jeu();		
 		scanner.close();
 		
 		
