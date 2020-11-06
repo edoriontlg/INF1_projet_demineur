@@ -54,8 +54,8 @@ public class projet_demineur {
 		Tadj = new int[hauteur][largeur]; // initialisation de Tadj
 		T = new int[hauteur][largeur]; // initialisation de T
 		for(int i = 0; i < n; i++) { //cette boucle for va placer des bombes aléatoirement dans Tadj
-			int bombeL = entierAleatoire(0, largeur);
-			int bombeH = entierAleatoire(0, hauteur);
+			int bombeL = entierAleatoire(0, largeur+1);
+			int bombeH = entierAleatoire(0, hauteur+1);
 			if (Tadj[bombeH][bombeL] != -1) Tadj[bombeH][bombeL] = -1;	// ce if evite qu'il y ai moins de bombes que prévu, si 2 bombes se trouvent au meme endroits
 			else n++;
 		}
@@ -67,7 +67,7 @@ public class projet_demineur {
 	}
 
 	
-	static void afficheTabj (int hauteur,int largeur) { //fonction qui va afficher Tabj
+	static void afficheTadj (int hauteur,int largeur) { //fonction qui va afficher Tabj
 		for ( int j = 0; j < hauteur; j ++) {
 			for ( int k = 0; k < largeur; k ++) {
 				if (Tadj[j][k]!=-1) System.out.print(" "+Tadj[j][k]+" ");			
@@ -336,8 +336,7 @@ public class projet_demineur {
 		}		
 		init (hauteur, largeur, n);
 		calculerAdjacent();
-		System.out.println("Action : r ( revele ), d ( met un drapeau). Coordonnées : lignes( 00,01,02,...), colonnes ( A,B,C...z");
-		System.out.println();
+		System.out.println("Action : r ( revele ), d ( met un drapeau). Coordonnées : lignes( 00,01,02,...), colonnes ( A,B,C...z)");
 		jeu();		
 		scanner.close();
 		
