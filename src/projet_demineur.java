@@ -44,22 +44,24 @@ public class projet_demineur {
 	//
 
 	// Question 1.a] déclarez les variables globales T et Tadj ici
-	static int[][] T; //Voici les variables globale
-	static int[][] Tadj;
+	static int[][] T; //Tableau indiquant les cases révélées
+	static int[][] Tadj; //Tableau contenant la position des bombes
 	
 
 
 	// Question 1.b] Fonction init
-	static void init(int hauteur, int largeur, int n) { // ATTENTION, vous devez modifier la signature de cette fonction	
+	static void init(int hauteur, int largeur, int n) {
+
 		Tadj = new int[hauteur][largeur]; // initialisation de Tadj
 		T = new int[hauteur][largeur]; // initialisation de T
-		for(int i = 0; i < n; i++) { //cette boucle for va placer des bombes aléatoirement dans Tadj
+		
+		for(int i = 0; i < n; i++) { //va placer des bombes aléatoirement dans Tadj
 			int bombeL = entierAleatoire(0, largeur+1);
 			int bombeH = entierAleatoire(0, hauteur+1);
-			if (Tadj[bombeH][bombeL] != -1) Tadj[bombeH][bombeL] = -1;	// ce if evite qu'il y ai moins de bombes que prévu, si 2 bombes se trouvent au meme endroits
-			else n++;
+			if (Tadj[bombeH][bombeL] != -1) Tadj[bombeH][bombeL] = -1;	//Si pas de bombe, en pose une
+			else n++; //Sinon, augmente n (sinon on se retrouve avec 1 bombe en moins)
 		}
-		for ( int j = 0; j < hauteur; j ++) { // cette boucle place les 0 sur toutes les autres cases de Tabj
+		for ( int j = 0; j < hauteur; j ++) { //Initialise toutes les cases non égales à -1 à 0 (place des espaces vides là ou il n'y a pas de bombes)
 			for ( int k = 0; k < largeur; k ++) {
 				if (Tadj[j][k] != -1) Tadj[j][k]= 0;
 			}
@@ -67,9 +69,10 @@ public class projet_demineur {
 	}
 
 	
-	static void afficheTadj (int hauteur,int largeur) { //fonction qui va afficher Tabj
-		for ( int j = 0; j < hauteur; j ++) {
+	static void afficheTadj (int hauteur,int largeur) { //fonction qui va afficher Tabj (DEBUG)
+		for ( int j = 0; j < hauteur; j ++) { //Parcours toutes les cases
 			for ( int k = 0; k < largeur; k ++) {
+
 				if (Tadj[j][k]!=-1) System.out.print(" "+Tadj[j][k]+" ");			
 				else System.out.print(Tadj[j][k]+" ");	
 			}
@@ -79,18 +82,18 @@ public class projet_demineur {
 	
 		
 	// Question 1.c] Fonction caseCorrecte
-	static boolean caseCorrecte(int i, int j) { // ATTENTION, vous devez modifier la signature de cette fonction)
+	static boolean caseCorrecte(int i, int j) {
 		return i < Tadj.length && j < Tadj[0].length && i >= 0 && j >= 0; // rempli les conditions que i et j doivent etre compris entre 0 (inclu) et longueur ou largeur (non inclu)
 	}
 
 	// Question 1.d] Fonction calculerAdjacent
 	static void calculerAdjacent() {
-		for ( int i = 0; i < Tadj.length; i++) {
-			for ( int j = 0; j< Tadj[0].length; j++) { //ces 2 boucles for servent à scrupter pour chaques cases du tableau
-				if (Tadj[i][j]!=-1) { //ce if vérifie que la case en question n'est pas une bombe
-					for (int k = i-1; k <= i+1; k++) {
-						for ( int z = j-1; z <= j+1; z++) { // ces 2 boucles for vont scrupter toutes les cases autour de la case à vérifier ( 1 case en diagonal et une 1 case de haut en bas et de droite a gauche )							
-							if ( caseCorrecte(k,z) && Tadj[k][z]== -1) Tadj[i][j]++; //c'est un if important, pour les cases se trouvant en bordure ou en coin de Tadj, pour eviter que k et z soient égal a -1 ou a tadj.length et si une des cases à coté de la case à vérifier est une bombe, alors elle sera incrémentée de 1						
+		for ( int i = 0; i < Tadj.length; i++) {    				 //Parcours le tableau
+			for ( int j = 0; j< Tadj[0].length; j++) {
+				if (Tadj[i][j]!=-1) {								 //Vérifie que ce n'est pas une bombe
+					for (int k = i-1; k <= i+1; k++) {				 //Si c'en est pas une, parcours les cases adjacentes
+						for ( int z = j-1; z <= j+1; z++) {			 							
+							if ( caseCorrecte(k,z) && Tadj[k][z]== -1) Tadj[i][j]++; //Si la case est correcte, ajoute 1 à la case en question (car à côté d'une bombe)					
 						}
 					}			
 				}
@@ -103,11 +106,9 @@ public class projet_demineur {
 	//
 
 	// Question 2.a]
-	static void afficherGrille(boolean affMines) { // ATTENTION, vous devez modifier la signature de cette fonction
-
-		clearScreen();
-
-		//Affichage ligne 0
+	static void afficherGrille(boolean affMines) {
+		
+		//Affichage ligne 0 (LETTRES)
 		int lettres = 65;
 		System.out.print("  |");
 		for ( int i = 0; i<T[0].length; i ++) {
@@ -120,37 +121,43 @@ public class projet_demineur {
 				lettres = lettres + 7;
 			}
 		}
+
+		
 		System.out.println();
 		//Affichage lignes
 		int unite = 0;
 		int dizaine = 0;	
-		for (int i = 0; i < T.length; i++) {	
-			//affichage 0	
-			if ( unite > 9) {
+		
+		for (int i = 0; i < T.length; i++) {	//Pour chaque ligne
+			
+			if ( unite > 9) { //Update l'index de la ligne
 				unite = 0;
 				dizaine++;
 			}
-			System.out.print(dizaine+""+unite+"|");
+
+			System.out.print(dizaine+""+unite+"|"); //Affiche l'index de la ligne
 			unite++;
-			//affiche reste
-			for ( int j = 0; j < T[i].length; j++) {
-				if (affMines) {
-					if (T[i][j] == 0) System.out.print(" |");							
-					else if (T[i][j] == 1) {
-						if (Tadj[i][j] == -1) {
-							System.out.print("!|");
-						}
+
+			//affiche le reste
+			for ( int j = 0; j < T[i].length; j++) { //Parcours les colonnes
+				
+				if (!affMines) { //Si les bombes ne doivent pas être révélées
+					if (T[i][j] == 0) System.out.print(" |"); //Si la case n'est pas révélée, affiche rien					
+					else if (T[i][j] == 1) { //Sinon
+
+						if (Tadj[i][j] == -1) System.out.print("!|"); //Si la case est une bomb, l'affiche
 						
-						else System.out.print(Tadj[i][j] +"|");
+						
+						else System.out.print(Tadj[i][j] +"|"); //Sinon affiche le contenu (Le nombre de bombes adjacentes)
 					} 
-					else System.out.print("X|");										
+					else System.out.print("X|");	//Sinon la case est marqué et affiche un X									
 				} 
-				else {
-					if (Tadj[i][j] == -1) System.out.print("!|");
-					else System.out.print(Tadj[i][j] +"|");
+				else { //Si les bombes doivent être révélées.
+					if (Tadj[i][j] == -1) System.out.print("!|");  //Si la case est une bombe l'affiche
+					else System.out.print(Tadj[i][j] +"|"); //Sinon affiche son contenu (bombes adjacentes)
 				}
 			}
-			System.out.println();		
+			System.out.println(); //Retourne à la ligne
 		}		
 	}
 
@@ -277,13 +284,13 @@ public class projet_demineur {
 	// Question 4.d]
 	static void jeu() {
 		Scanner sc = new Scanner(System.in);
-		boolean pasPerdu= true;
+		boolean pasPerdu = true;
 		while (pasPerdu) {	
 			if (aGagne()) {
 				pasPerdu = false;
 				break;
 			}
-			afficherGrille(true);
+			afficherGrille(false);
 			System.out.print("entrez votre action et vos coordonnées : ");
 			String coord = sc.nextLine();		
 			if (!verifierFormat(coord)) {
@@ -302,11 +309,11 @@ public class projet_demineur {
 			}							
 		}
 		if(aGagne()) {
-			afficherGrille(true);
+			afficherGrille(false);
 			System.out.print("vous avez gagné");
 		}
 		else {
-			afficherGrille(false);
+			afficherGrille(true);
 			System.out.print("vous avez perdu");
 		}
 		sc.close();
@@ -353,8 +360,29 @@ public class projet_demineur {
 	//
 
 	// Question 5.a] Optionnel
-	public static void aide() {
-		
+	static void aide() {
+		for (int i = 0; i<T.length; i ++){
+			for ( int j = 0; j<T[0].length; i++ ){
+				if (T[i][j]==1){
+					int tmp = 0;
+					for (int k = i-1; k <= i+1; k++) {
+						for ( int z = j-1; z <= j+1; z++) {
+							if (T[k][z]==1&& k!=i && z!=j) tmp++;					
+						}
+					}
+					if (Tadj[i][j]==8-tmp) {
+						for (int k = i-1; k <= i+1; k++) {
+							for ( int z = j-1; z <= j+1; z++) {
+								if (T[k][z]==0){
+									T[k][z]=2;
+								}
+							}
+						}
+						return;
+					}
+				}
+			}
+		}
 	}
 
 	// Question 5.b] Optionnel
@@ -370,14 +398,5 @@ public class projet_demineur {
 
 	// As taken from
     // https://stackoverflow.com/questions/2979383/java-clear-the-console
-    public static void clearScreen() {
-        try {
-            if (System.getProperty("os.name").contains("Windows")) {
-                new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
-            } else {
-                System.out.print("\033\143");
-            }
-        } catch (IOException | InterruptedException ex) {
-        }
-    }
+
 }
