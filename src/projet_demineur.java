@@ -104,6 +104,9 @@ public class projet_demineur {
 
 	// Question 2.a]
 	static void afficherGrille(boolean affMines) { // ATTENTION, vous devez modifier la signature de cette fonction
+
+		clearScreen();
+
 		//Affichage ligne 0
 		int lettres = 65;
 		System.out.print("  |");
@@ -331,7 +334,7 @@ public class projet_demineur {
 		System.out.print("entrez le nombre de mines : ");
 		int n = scanner.nextInt();
 		if ( n>hauteur*largeur||n<1) {
-			System.out.print("ré-entrez le nombre de mines. Il doit etre compris entre 1 et "+largeur*hauteur+"inclus. ");
+			System.out.print("ré-entrez le nombre de mines. Il doit etre compris entre 1 et "+largeur*hauteur+" inclus. ");
 			 n = scanner.nextInt();
 		}		
 		init (hauteur, largeur, n);
