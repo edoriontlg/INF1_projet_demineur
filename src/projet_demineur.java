@@ -252,7 +252,7 @@ public class projet_demineur {
 
 	// Question 4.b]
 	static boolean verifierFormat( String s ) { // ATTENTION, vous devez modifier la signature de cette fonction
-		if ( s =="aide")return true;
+		if ( s.compareTo("aide")==0)return true;
 		else {
 			if ( s.length()!=4)return false;
 			else {
@@ -300,8 +300,8 @@ public class projet_demineur {
 				System.out.print("ré entrez votre action et/ou vos coordonnées, (elles sont fausses): ");
 				coord = sc.nextLine();
 			}
-			if ( coord =="aide"){
-				System.out.print("débrouille toi un peu la fonction aide est pas encore prête");
+			if ( coord.compareTo("aide")==0){
+				System.out.println("débrouille toi un peu la fonction aide est pas encore prête.");
 			}
 			else {
 				int[]coord2 = conversionCoordonnees(coord);
