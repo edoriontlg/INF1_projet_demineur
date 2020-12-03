@@ -302,7 +302,7 @@ public class projet_demineur {
 				coord = sc.nextLine();
 			}
 			if ( coord.compareTo("aide")==0){
-				System.out.println("débrouille toi un peu la fonction aide est pas encore prête.");
+				aide();
 			}
 			else {
 				int[]coord2 = conversionCoordonnees(coord);
@@ -334,7 +334,7 @@ public class projet_demineur {
 	public static void main(String[] args) {
 		Scanner scanner = new Scanner(System.in);
 
-		System.out.println("entrez une largeur : "); 
+		System.out.print("entrez une largeur : "); 
 		int largeur = 0;
 
 		//Essaye de récupérer le nombre (on utilise ici next line afin d'éviter un bug de "selfread" du à nextInt)
@@ -399,16 +399,23 @@ public class projet_demineur {
 		for (int i = 0; i<T.length; i ++){
 			for ( int j = 0; j<T[0].length; i++ ){
 				if (T[i][j]==1){
-					int tmp = 0;
+					int caseR = 0;
+					int caseAdj = 0;
 					for (int k = i-1; k <= i+1; k++) {
 						for ( int z = j-1; z <= j+1; z++) {
-							if (T[k][z]==1&& k!=i && z!=j) tmp++;					
+							if ( caseCorrecte(k,z)){
+								caseAdj++;
+								if(T[k][z]==1 && k!=i && z!=j){
+									caseR++;
+								}
+							}  	
+
 						}
 					}
-					if (Tadj[i][j]==8-tmp) {
+					if (Tadj[i][j]==caseAdj-caseR) {
 						for (int k = i-1; k <= i+1; k++) {
 							for ( int z = j-1; z <= j+1; z++) {
-								if (T[k][z]==0){
+								if (caseCorrecte(k,z)&&T[k][z]==0){
 									T[k][z]=2;
 								}
 							}
@@ -418,6 +425,7 @@ public class projet_demineur {
 				}
 			}
 		}
+		System.out.println("désolé, je ne peux pas t'aider, découvre une case au hasard et tu verras bien !");
 	}
 
 	// Question 5.b] Optionnel
