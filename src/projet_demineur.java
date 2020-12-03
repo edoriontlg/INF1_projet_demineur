@@ -67,16 +67,6 @@ public class projet_demineur {
 	}
 
 	
-	static void afficheTadj (int hauteur,int largeur) { //fonction qui va afficher Tabj
-		for ( int j = 0; j < hauteur; j ++) {
-			for ( int k = 0; k < largeur; k ++) {
-				if (Tadj[j][k]!=-1) System.out.print(" "+Tadj[j][k]+" ");			
-				else System.out.print(Tadj[j][k]+" ");	
-			}
-			System.out.println();
-		}
-	}
-	
 		
 	// Question 1.c] Fonction caseCorrecte
 	static boolean caseCorrecte(int i, int j) { // ATTENTION, vous devez modifier la signature de cette fonction)
@@ -264,7 +254,7 @@ public class projet_demineur {
 		int[]t = new int[3];
 		t[0] = Integer.parseInt(input.substring(1, 3));
 		int lettre = (int)input.charAt(3);
-		if (lettre >90)t[1] = lettre-97;
+		if (lettre >90)t[1] = lettre-65-6;
 		else t[1]=lettre-65;
 		if (input.charAt(0)=='d')t[2]=0;
 		else t[2]=1;
