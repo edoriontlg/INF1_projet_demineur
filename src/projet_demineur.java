@@ -252,19 +252,22 @@ public class projet_demineur {
 
 	// Question 4.b]
 	static boolean verifierFormat( String s ) { // ATTENTION, vous devez modifier la signature de cette fonction
-		if ( s.length()!=4)return false;
+		if ( s =="aide")return true;
 		else {
-			if ( s.charAt(0) != 'd' && s.charAt(0) != 'r' ) return false;	
-			else if ( s.charAt(1)!='0'&& s.charAt(1)!='1'&& s.charAt(1)!='2'&& s.charAt(1)!='3'&& s.charAt(1)!='4'&& s.charAt(1)!='5'&& s.charAt(1)!='6'&& s.charAt(1)!='7'&& s.charAt(1)!='8'&& s.charAt(1)!='9') return false;
-			else if ( s.charAt(2)!='0'&& s.charAt(2)!='1'&& s.charAt(2)!='2'&& s.charAt(2)!='3'&& s.charAt(2)!='4'&& s.charAt(2)!='5'&& s.charAt(2)!='6'&& s.charAt(2)!='7'&& s.charAt(2)!='8'&& s.charAt(2)!='9') return false;
+			if ( s.length()!=4)return false;
 			else {
-				int lettres = 65;
-				for ( int i = 0; i < 52;i ++) {
-					if ( s.charAt(3)==(char)lettres)return true;
-					if (i!=25) lettres++;																	
-					else lettres=lettres + 7;																									
-				}			
-				return false;
+				if ( s.charAt(0) != 'd' && s.charAt(0) != 'r' ) return false;	
+				else if ( s.charAt(1)!='0'&& s.charAt(1)!='1'&& s.charAt(1)!='2'&& s.charAt(1)!='3'&& s.charAt(1)!='4'&& s.charAt(1)!='5'&& s.charAt(1)!='6'&& s.charAt(1)!='7'&& s.charAt(1)!='8'&& s.charAt(1)!='9') return false;
+				else if ( s.charAt(2)!='0'&& s.charAt(2)!='1'&& s.charAt(2)!='2'&& s.charAt(2)!='3'&& s.charAt(2)!='4'&& s.charAt(2)!='5'&& s.charAt(2)!='6'&& s.charAt(2)!='7'&& s.charAt(2)!='8'&& s.charAt(2)!='9') return false;
+				else {
+					int lettres = 65;
+					for ( int i = 0; i < 52;i ++) {
+						if ( s.charAt(3)==(char)lettres)return true;
+						if (i!=25) lettres++;																	
+						else lettres=lettres + 7;																									
+					}			
+					return false;
+				}
 			}			
 		}
 	}
@@ -274,7 +277,7 @@ public class projet_demineur {
 		int[]t = new int[3];
 		t[0] = Integer.parseInt(input.substring(1, 3));
 		int lettre = (int)input.charAt(3);
-		if (lettre >90)t[1] = lettre-97;
+		if (lettre >'Z')t[1] = lettre-71;
 		else t[1]=lettre-65;
 		if (input.charAt(0)=='d')t[2]=0;
 		else t[2]=1;
@@ -291,23 +294,27 @@ public class projet_demineur {
 				break;
 			}
 			afficherGrille(false);
-			System.out.print("entrez votre action et vos coordonnées : ");
+			System.out.print("entrez votre action et/ou vos coordonnées : ");
 			String coord = sc.nextLine();		
-			if (!verifierFormat(coord)) {
-				System.out.print("ré entrez votre action et vos coordonnées, (elles sont fausses): ");
+			while (!verifierFormat(coord)) {
+				System.out.print("ré entrez votre action et/ou vos coordonnées, (elles sont fausses): ");
 				coord = sc.nextLine();
 			}
-			
-			int[]coord2 = conversionCoordonnees(coord);
-			if (coord2[2]==0) {
-				actionDrapeau(coord2[0],coord2[1]);
-				T[coord2[0]][coord2[1]] = 2;
+			if ( coord =="aide"){
+				System.out.print("débrouille toi un peu la fonction aide est pas encore prête");
+			}
+			else {
+				int[]coord2 = conversionCoordonnees(coord);
+				if (coord2[2]==0) {
+					actionDrapeau(coord2[0],coord2[1]);
+					T[coord2[0]][coord2[1]] = 2;
 					
 				}
-			else {					
+				else {					
 					pasPerdu = revelerCase(coord2[0],coord2[1]);
-			}							
-		}
+				}							
+			}
+		}	
 		if(aGagne()) {
 			afficherGrille(false);
 			System.out.print("vous avez gagné");
@@ -327,21 +334,21 @@ public class projet_demineur {
 		Scanner scanner = new Scanner(System.in);
 		System.out.print("entrez une largeur : ");
 		int largeur = scanner.nextInt();
-		if (largeur>52||largeur<1) {
-			System.out.print("ré-entrez une largeur, elle est trop grande ou trop petite ( entre 1 et 52 inclus).");
+		while (largeur>52||largeur<1) {
+			System.out.print("ré-entrez une largeur, elle est trop grande ou trop petite ( entre 1 et 52 inclus) : ");
 			largeur = scanner.nextInt();
 		}
 		System.out.print("entrez une hauteur : ");
 		
 		int hauteur = scanner.nextInt(); 
-		if (hauteur>100||hauteur<1) {
-			System.out.print("ré-entrez une hauteur, elle est trop grande ou trop petite ( entre 1 et 100 inclus).");
+		while (hauteur>100||hauteur<1) {
+			System.out.print("ré-entrez une hauteur, elle est trop grande ou trop petite ( entre 1 et 100 inclus) : ");
 			hauteur = scanner.nextInt();
 		}
 		System.out.print("entrez le nombre de mines : ");
 		int n = scanner.nextInt();
-		if ( n>hauteur*largeur||n<1) {
-			System.out.print("ré-entrez le nombre de mines. Il doit etre compris entre 1 et "+largeur*hauteur+" inclus. ");
+		while ( n>hauteur*largeur||n<1) {
+			System.out.print("ré-entrez le nombre de mines. Il doit etre compris entre 1 et "+largeur*hauteur+" inclus : ");
 			 n = scanner.nextInt();
 		}		
 		init (hauteur, largeur, n);
