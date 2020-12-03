@@ -24,6 +24,7 @@
 // Pour utiliser des scanners pour lire des entrées depuis le clavier
 // utilisés en questions 4.d] pour la fonction jeu()
 import java.io.IOException;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 // Pour la fonction entierAleatoire(a, b) que l'on vous donne ci-dessous
@@ -332,25 +333,52 @@ public class projet_demineur {
 	// Votre *unique* méthode main
 	public static void main(String[] args) {
 		Scanner scanner = new Scanner(System.in);
-		System.out.print("entrez une largeur : ");
-		int largeur = scanner.nextInt();
+
+		System.out.println("entrez une largeur : "); 
+		int largeur = 0;
+
+		//Essaye de récupérer le nombre (on utilise ici next line afin d'éviter un bug de "selfread" du à nextInt)
+		try {
+			largeur = Integer.parseInt(scanner.nextLine());  //Si on arrive pas à parser, ce n'est pas un nombre. largeur est donc égal à 0
+		} catch (Exception e) {}
+
+		//Même chose que précedemment, en boucle tant que la valeur n'est pas correctement définie
 		while (largeur>52||largeur<1) {
-			System.out.print("ré-entrez une largeur, elle est trop grande ou trop petite ( entre 1 et 52 inclus) : ");
-			largeur = scanner.nextInt();
+				System.out.println("ré-entrez une largeur, votre valeur n'est pas correcte ( entre 1 et 52 inclus). : ");
+				try {
+					largeur = Integer.parseInt(scanner.nextLine());
+				} catch (Exception e) {}
 		}
+
+
 		System.out.print("entrez une hauteur : ");
-		
-		int hauteur = scanner.nextInt(); 
+		int hauteur = 0;
+		try {
+			hauteur = Integer.parseInt(scanner.nextLine());  //Si on arrive pas à parser, ce n'est pas un nombre. largeur est donc égal à 0
+		} catch (Exception e) {}
+
 		while (hauteur>100||hauteur<1) {
-			System.out.print("ré-entrez une hauteur, elle est trop grande ou trop petite ( entre 1 et 100 inclus) : ");
-			hauteur = scanner.nextInt();
+			System.out.println("ré-entrez une hauteur, votre valeur n'est pas correcte ( entre 1 et 100 inclus). : ");
+			try {
+				hauteur = Integer.parseInt(scanner.nextLine());
+			} catch (Exception e) {}
 		}
+
+
 		System.out.print("entrez le nombre de mines : ");
-		int n = scanner.nextInt();
+		int n = 0;
+		try {
+			n = Integer.parseInt(scanner.nextLine());  //Si on arrive pas à parser, ce n'est pas un nombre. largeur est donc égal à 0
+		} catch (Exception e) {}
+
 		while ( n>hauteur*largeur||n<1) {
-			System.out.print("ré-entrez le nombre de mines. Il doit etre compris entre 1 et "+largeur*hauteur+" inclus : ");
-			 n = scanner.nextInt();
+			System.out.print("ré-entrez le nombre de mines. Il doit etre compris entre 1 et "+largeur*hauteur+" inclus. : ");
+			try {
+				n = Integer.parseInt(scanner.nextLine());
+			} catch (Exception e) {}
 		}		
+
+
 		init (hauteur, largeur, n);
 		calculerAdjacent();
 		System.out.println("Action : r ( revele ), d ( met un drapeau). Coordonnées : lignes( 00,01,02,...), colonnes ( A,B,C...z)");
