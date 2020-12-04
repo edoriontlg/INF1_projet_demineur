@@ -247,14 +247,16 @@ public class projet_demineur {
 				if (s.charAt(0) != 'd' && s.charAt(0) != 'r')
 					return false;
 				// Verifie que les 2 charactères suivant sont des chiffres
-				else if (!(s.charAt(1) <= '9' && s.charAt(1) >= '1'))
+				else if (s.charAt(1) > '9' && s.charAt(1) < '0')
 					return false;
-				else if (!(s.charAt(2) <= '9' && s.charAt(2) >= '1'))
+				else if (s.charAt(2) > '9' || s.charAt(2) < '0')
 					return false;
 				// Verifie que le dernier charactère est une lettre valide
-				else if (!(s.charAt(2) <= 'Z' && s.charAt(2) >= 'A' && s.charAt(2) <= 'z' && s.charAt(2) >= 'a'))
+				else if (!((s.charAt(3) <= 'Z' && s.charAt(3) >= 'A') || (s.charAt(3) <= 'z' && s.charAt(3) >= 'a')))
 					return false;
+				
 			}
+			
 		}
 
 		return true;
