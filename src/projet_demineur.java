@@ -312,11 +312,26 @@ public class projet_demineur {
 
 			System.out.print("entrez votre action et/ou vos coordonnees : ");
 			String coord = sc.nextLine(); // Scanne l'action
+			
+			boolean caseOK = false;
+
+			//Vérifie si le format et la case est correcte
+			int[] coordtmp;
+			if (verifierFormat(coord)){
+				coordtmp = conversionCoordonnees(coord); 
+				caseOK = caseCorrecte(coordtmp[0], coordtmp[1]);
+			}
 
 			// Tant que les coordonnees ne sont pas correctes
-			while (!verifierFormat(coord)) {
+			while (!verifierFormat(coord) || !caseOK) {
 				System.out.print("re entrez votre action et/ou vos coordonnees, (elles sont fausses): ");
 				coord = sc.nextLine();
+
+				//Recalcule si la case est OK (pas necessaire si le format n'est pas ok car la boucle continuera quand même)
+				if (verifierFormat(coord)){
+					coordtmp = conversionCoordonnees(coord); 
+					caseOK = caseCorrecte(coordtmp[0], coordtmp[1]);
+				}
 			}
 
 			// Si l'action est "aide"
