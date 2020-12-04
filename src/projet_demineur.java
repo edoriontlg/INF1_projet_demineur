@@ -302,45 +302,62 @@ public class projet_demineur {
 	static void jeu() {
 		// Initialise le scanner
 		Scanner sc = new Scanner(System.in);
+
 		// Variable maintenant la boucle
 		boolean pasPerdu = true;
-		boolean caseOK = false;
+		//Verification des actions
 		int[] coordtmp = new int[3];
+
 		while (pasPerdu) {
 			// Si le joueur à gagne, arrête la boucle
 			if (aGagne()) {
 				pasPerdu = false;
 				break;
 			}
+
 			// Affiche la grille ( sans les bombes )
 			afficherGrille(false);
+
+
 			System.out.print("entrez votre action et/ou vos coordonnees : ");
-			String coord = sc.nextLine(); // Scanne l'action	
-			//Vérifie si le format est correcte
+			String coord = sc.nextLine(); // Scanne l'action
+
+			//Vérifie si le format est correct
 			while (!verifierFormat(coord)){
 				System.out.print("re entrez votre action et/ou vos coordonnées, elles sont fausses : ");
 				coord = sc.nextLine();
 			}
+
+
 			if ( coord.compareTo("aide")==0)aide();
 			else{	
 				coordtmp = conversionCoordonnees(coord); //passe les coordonnées entrées sous format int
-				caseOK = caseCorrecte(coordtmp[0],coordtmp[1]);
-				while ( !caseOK || !verifierFormat(coord) ){
+
+				//Verifie si la case est ok
+				
+
+				//Tant qu'elle n'est pas ok
+				while ( !caseCorrecte(coordtmp[0],coordtmp[1])|| !verifierFormat(coord) ){
 					System.out.print("re entrez votre action et/ou vos coordonnées, elles sont fausses : ");
 					coord = sc.nextLine();
 					coordtmp = conversionCoordonnees(coord);
-					caseOK = caseCorrecte(coordtmp[0],coordtmp[1]);
+					
 				}
+
+
 				coordtmp = conversionCoordonnees(coord); //passe les coordonnées entrées sous format int
+
 				if (coordtmp[2] == 0) { //on verifie quelle  action il faut faire ( ici celle du drapeau )
-				actionDrapeau(coordtmp[0], coordtmp[1]);
+					actionDrapeau(coordtmp[0], coordtmp[1]);
 				}
 			 	else { // Action reveler (verifie si on revèle pas une mauvaise case)
-				pasPerdu = revelerCase(coordtmp[0], coordtmp[1]);
+					pasPerdu = revelerCase(coordtmp[0], coordtmp[1]);
 				}
 			}
 		}
-		// Quand la boucle est fini (perdu ou gagné)
+
+
+		// Quand la boucle est finie (perdu ou gagné)
 		// On verifie si le joueur à gagne ou non
 		if (aGagne()) {
 			afficherGrille(false);
@@ -352,11 +369,6 @@ public class projet_demineur {
 		}
 		sc.close();
 	}
-	
-	
-
-
-
 
 
 
@@ -366,10 +378,9 @@ public class projet_demineur {
 		// Initialise le scanner qui servira à la creation de la partie
 		Scanner scanner = new Scanner(System.in);
 
-
-
 		System.out.print("entrez une largeur : ");
 		int largeur = 0;
+
 
 		// Essaye de recuperer le nombre (on utilise ici next line afin d'eviter un bug de "selfread" du à nextInt)
 		try {
@@ -383,6 +394,7 @@ public class projet_demineur {
 				largeur = Integer.parseInt(scanner.nextLine());
 			} catch (Exception e) {}
 		}
+
 
 
 
@@ -428,10 +440,13 @@ public class projet_demineur {
 		// Lance le jeu
 		System.out.print("tapez 'joueur' pour jouer vous même, ou'IA' pour laisser la machine jouer : ");
 		String type = scanner.nextLine();
+
+
 		while (type.compareTo("joueur")!=0 && type.compareTo("IA")!=0){
 			System.out.print("Vous avez mal écrit. tapez 'joueur' pour jouer vous même, ou'IA' pour laisser la machine jouer : ");
 			type = scanner.nextLine();
 		}
+
 		if (type.compareTo("joueur")==0 ){
 			// Affiche le formattage des actions
 			System.out.println("Action : r ( revele ), d ( met un drapeau). Coordonnees : lignes( 00,01,02,...), colonnes ( A,B,C...z)");
