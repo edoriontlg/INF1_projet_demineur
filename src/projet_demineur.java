@@ -242,13 +242,12 @@ public class projet_demineur {
 
 	// Question 4.a]
 	static boolean aGagne() {
-		int compte = 0;
 		for ( int i = 0; i < T.length; i++) {
 			for ( int j = 0; j< T[0].length; j++) {
-				if (( T[i][j]==1 && Tadj[i][j]!=-1)||(( T[i][j]==2||T[i][j]==0) && Tadj[i][j]==-1))compte++;
+				if (Tadj[i][j] != -1 && T[i][j] != 1) return false;
 			}
 		}
-		return compte == T.length*T[0].length;
+		return true;
 	}
 
 	// Question 4.b]
