@@ -4,7 +4,7 @@
 //
 //
 //NE PAS UTILISER AIDE, N'EST PAS FONCTIONELLE ET APPORTE DES ERREURS !
-//Nous l'avons laissé dans le code afin que vous voyez nos avancement tout de mêm
+//Nous l'avons laissé dans le code afin que vous voyez nos avancement tout de même
 //
 //
 
@@ -31,6 +31,10 @@ public class projet_demineur {
 	// Question 1.a]
 	static int[][] T; // Tableau indiquant les cases revelees
 	static int[][] Tadj; // Tableau contenant la position des bombes
+	
+	static int pasRevele = 0;
+	static int revele = 1;
+	static int drapeau = 2;
 
 	// Question 1.b] Fonction init
 	static void init(int hauteur, int largeur, int n) {
@@ -244,7 +248,7 @@ public class projet_demineur {
 	static boolean verifierFormat(String s) {
 
 		if (s.compareTo("aide") == 0)
-			return false; // Si la commande est aide, retourne ok (ICI RETOURNE FAUX CAR FONCTION AIDE DESACTIVEE, pour cause de bugs)
+			return true; // Si la commande est aide, 
 
 		else {
 			if (s.length() != 4)
@@ -290,76 +294,69 @@ public class projet_demineur {
 		return t;
 	}
 
+
+
+
+
+
 	// Question 4.d]
 	static void jeu() {
-
 		// Initialise le scanner
 		Scanner sc = new Scanner(System.in);
-
 		// Variable maintenant la boucle
 		boolean pasPerdu = true;
-
+		boolean caseOK = false;
+		int[] coordtmp = new int[3];
 		while (pasPerdu) {
-
 			// Si le joueur à gagne, arrête la boucle
 			if (aGagne()) {
 				pasPerdu = false;
 				break;
 			}
-
-			// Affiche la grile (sans les bombes)
+			// Affiche la grille (sans les bombes)
 			afficherGrille(false);
-
 			System.out.print("entrez votre action et/ou vos coordonnees : ");
-			String coord = sc.nextLine(); // Scanne l'action
-			
-			boolean caseOK = false;
-
-			//Vérifie si le format et la case est correcte
-			int[] coordtmp;
-			if (verifierFormat(coord)){
-				coordtmp = conversionCoordonnees(coord); 
-				caseOK = caseCorrecte(coordtmp[0], coordtmp[1]);
-			}
-
-			// Tant que les coordonnees ne sont pas correctes
-			while (!verifierFormat(coord) || !caseOK) {
-				System.out.print("re entrez votre action et/ou vos coordonnees, (elles sont fausses): ");
+			String coord = sc.nextLine(); // Scanne l'action	
+			//Vérifie si le format est correcte
+			while (!verifierFormat(coord)){
+				System.out.print("re entrez votre action et/ou vos coordonnées, elles sont fausses : ");
 				coord = sc.nextLine();
-
-				//Recalcule si la case est OK (pas necessaire si le format n'est pas ok car la boucle continuera quand même)
-				if (verifierFormat(coord)){
-					coordtmp = conversionCoordonnees(coord); 
-					caseOK = caseCorrecte(coordtmp[0], coordtmp[1]);
-				}
 			}
-
-			// Si l'action est "aide"
-			if (coord.compareTo("aide") == 0) {
-				aide(); // Demande de l'aide
-			} else { // Sinon
-				int[] coord2 = conversionCoordonnees(coord); // Convertis les coordonnees
-				if (coord2[2] == 0) { // Action drapeau
-					actionDrapeau(coord2[0], coord2[1]);
-				} else { // Action reveler (verifie si on revèle pas une mauvaise case)
-					pasPerdu = revelerCase(coord2[0], coord2[1]);
+			if ( coord.compareTo("aide")==0)aide();
+			else{	
+				coordtmp = conversionCoordonnees(coord); //passe les coordonnées entrées sous format int
+				while ( !caseCorrecte(coordtmp[0],coordtmp[1])&&!verifierFormat(coord)){
+					System.out.print("re entrez votre action et/ou vos coordonnées, elles sont en dehors du tableau : ");
+					coord = sc.nextLine();
+					coordtmp = conversionCoordonnees(coord);
+				}
+				if (coordtmp[2] == 0) { //on verifie quelle  action il faut faire ( ici celle du drapeau )
+				actionDrapeau(coordtmp[0], coordtmp[1]);
+				}
+			 	else { // Action reveler (verifie si on revèle pas une mauvaise case)
+				pasPerdu = revelerCase(coordtmp[0], coordtmp[1]);
 				}
 			}
 		}
-
-		// Quand la boucle est fini (perdu ou gagne)
+		// Quand la boucle est fini (perdu ou gagné)
 		// On verifie si le joueur à gagne ou non
 		if (aGagne()) {
 			afficherGrille(false);
-			System.out.print("vous avez gagne");
-		} else {
+			System.out.println("vous avez gagné ! ");
+		} 
+		else {
 			afficherGrille(true);
-			System.out.print("vous avez perdu");
+			System.out.println("vous avez perdu :( ");
 		}
-
-		// Ferme le scanner
 		sc.close();
 	}
+	
+	
+
+
+
+
+
 
 	// Question 4.e]
 	// Votre *unique* methode main
@@ -424,11 +421,23 @@ public class projet_demineur {
 		// Calcule les cases
 		calculerAdjacent();
 
-		// Affiche le formattage des actions
-		System.out.println("Action : r ( revele ), d ( met un drapeau). Coordonnees : lignes( 00,01,02,...), colonnes ( A,B,C...z)");
+		
 
 		// Lance le jeu
-		jeu();
+		System.out.print("tapez 'joueur' pour jouer vous même, ou'IA' pour laisser la machine jouer : ");
+		String type = scanner.nextLine();
+		while (type.compareTo("joueur")!=0 && type.compareTo("IA")!=0){
+			System.out.print("Vous avez mal écrit. tapez 'joueur' pour jouer vous même, ou'IA' pour laisser la machine jouer : ");
+			type = scanner.nextLine();
+		}
+		if (type.compareTo("joueur")==0 ){
+			// Affiche le formattage des actions
+			System.out.println("Action : r ( revele ), d ( met un drapeau). Coordonnees : lignes( 00,01,02,...), colonnes ( A,B,C...z)");
+			jeu();
+		}
+		else {
+			intelligenceArtificielle();
+		}
 		scanner.close();
 
 	}
@@ -440,30 +449,33 @@ public class projet_demineur {
 	// Question 5.a] Optionnel
 	static void aide() {
 		for (int i = 0; i < T.length; i++) {
-			for (int j = 0; j < T[0].length; i++) {
-				if (T[i][j] == 1) {
+			for (int j = 0; j < T[0].length; j++) {
+				if (T[i][j] == revele) {
 					int caseRev = 0;
 					int caseAdj = 0;
 					for (int k = i - 1; k <= i + 1; k++) {
 						for (int z = j - 1; z <= j + 1; z++) {
-							if (caseCorrecte(k, z) && k != i && z != j) {
+							if (caseCorrecte(k, z) && (k != i || z != j)) {
 								caseAdj++;
-								if (T[k][z] == 1) {
+								if (T[k][z] == revele|| T[k][z] == drapeau) {
 									caseRev++;
 								}
 							}
 						}
 					}
-					if (Tadj[i][j] == caseAdj - caseRev) {
+					if (Tadj[i][j] == (caseAdj - caseRev) && Tadj[i][j]!=0) {
+						System.out.println(" i = "+i+" j = "+j+" => adj="+Tadj[i][j]+",  caseAdj = "+caseAdj+", caseRev = "+caseRev);
 						for (int k = i - 1; k <= i + 1; k++) {
 							for (int z = j - 1; z <= j + 1; z++) {
-								if (caseCorrecte(k, z) && T[k][z] == 0) {
+								if (caseCorrecte(k, z) && T[k][z] == pasRevele) {
 									char tmp;
-									if ((char) z <= 25)
+									if ((char) z <= 25){
 										tmp = (char) (z + 65);
-									else
+									}
+									else {
 										tmp = (char) (z + 71);
-									System.out.println("la case " + k + tmp + " est probablement une bombe");
+									}
+									System.out.println("la case " + k + tmp + " est une bombe");
 								}
 							}
 						}
@@ -477,7 +489,76 @@ public class projet_demineur {
 
 	// Question 5.b] Optionnel
 	public static void intelligenceArtificielle() {
-
+		boolean victoireDefaite = false;
+		int coord1 = entierAleatoire(0, T.length + 1);
+		int coord2= entierAleatoire(0, T[0].length + 1);
+		
+		while (T[coord1][coord2] ==1 ||T[coord1][coord2]== 2){
+				coord1 = entierAleatoire(0, T.length + 1);
+				coord2 = entierAleatoire(0, T[0].length + 1);
+			}
+			T[coord1][coord2] = revele;
+		if (Tadj[coord1][coord2]==-1){
+			victoireDefaite = true;
+		}
+		else {
+				revelation(coord1,coord2);
+		}
+		while (!victoireDefaite){
+			afficherGrille(false);
+			System.out.println();
+			for (int i = 0; i < T.length; i++) {
+				for (int j = 0; j < T[0].length; j++) {
+					if (T[i][j] == revele) {
+						int caseRev = 0;
+						int caseAdj = 0;
+						for (int k = i - 1; k <= i + 1; k++) {
+							for (int z = j - 1; z <= j + 1; z++) {
+								if (caseCorrecte(k, z) && (k != i || z != j)) {
+									caseAdj++;
+									if (T[k][z] == revele|| T[k][z] == drapeau) {
+										caseRev++;
+									}
+								}
+							}
+						}
+						if (Tadj[i][j] == (caseAdj - caseRev) && Tadj[i][j]!=0) {
+							for (int k = i - 1; k <= i + 1; k++) {
+								for (int z = j - 1; z <= j + 1; z++) {
+									if (caseCorrecte(k, z) && T[k][z] == pasRevele) {
+										T[k][z]=revele;
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		
+			coord1 = entierAleatoire(0, T.length + 1);
+			coord2= entierAleatoire(0, T[0].length + 1);
+			while (T[coord1][coord2] ==1 || T[coord1][coord2]== 2){
+				coord1 = entierAleatoire(0, T.length + 1);
+				coord2 = entierAleatoire(0, T[0].length + 1);
+			}
+			T[coord1][coord2] = revele;
+			if (Tadj[coord1][coord2]==-1){
+				victoireDefaite = false;
+			}
+			else {
+				revelation(coord1,coord2);						
+			}
+		}
+		
+		if (aGagne()) {
+		afficherGrille(false);
+		System.out.println("vous avez gagné ! ");
+		} 
+		else {
+		afficherGrille(true);
+		System.out.println("vous avez perdu :( ");
+		}
+		
 	}
 
 	// Question 5.c] Optionnel
