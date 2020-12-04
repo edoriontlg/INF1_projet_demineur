@@ -312,7 +312,7 @@ public class projet_demineur {
 				pasPerdu = false;
 				break;
 			}
-			// Affiche la grille (sans les bombes)
+			// Affiche la grille ( sans les bombes )
 			afficherGrille(false);
 			System.out.print("entrez votre action et/ou vos coordonnees : ");
 			String coord = sc.nextLine(); // Scanne l'action	
@@ -325,12 +325,13 @@ public class projet_demineur {
 			else{	
 				coordtmp = conversionCoordonnees(coord); //passe les coordonnées entrées sous format int
 				caseOK = caseCorrecte(coordtmp[0],coordtmp[1]);
-				while (!caseOK &&!verifierFormat(coord)){
-					System.out.print("re entrez votre action et/ou vos coordonnées, elles sont en dehors du tableau : ");
+				while ( !caseOK || !verifierFormat(coord) ){
+					System.out.print("re entrez votre action et/ou vos coordonnées, elles sont fausses : ");
 					coord = sc.nextLine();
 					coordtmp = conversionCoordonnees(coord);
 					caseOK = caseCorrecte(coordtmp[0],coordtmp[1]);
 				}
+				coordtmp = conversionCoordonnees(coord); //passe les coordonnées entrées sous format int
 				if (coordtmp[2] == 0) { //on verifie quelle  action il faut faire ( ici celle du drapeau )
 				actionDrapeau(coordtmp[0], coordtmp[1]);
 				}
