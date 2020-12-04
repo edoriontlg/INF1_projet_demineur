@@ -220,8 +220,7 @@ public class projet_demineur {
 	// Question 3.d]
 	static void actionDrapeau(int i, int j) { // ATTENTION, vous devez modifier la signature de cette fonction
 		if ( T[i][j]!=1) {
-			if (T[i][j]!=2) T[i][j] = 2;
-			else T[i][j] = 0;
+			T[i][j] = T[i][j] == 2 ? 0 : 2;
 		}
 	}
 	
