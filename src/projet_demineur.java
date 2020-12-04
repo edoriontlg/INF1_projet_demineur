@@ -1,30 +1,8 @@
-// Ceci est un squelette à REMPLIR pour le projet INF1 sur le jeu de démineur
-//
-// - N'oubliez pas de renseigner vos deux noms
-// Prénom Nom Groupe : élève 1/2
-// Prénom Nom Groupe élève 2/2
-//
-// - Pour chaque question, le squelette donne le nom de la fonction à écrire mais *pas* la signature
-//   il faut remplir les types d'entrées et de sorties (indiqués par ?) et remplir l'intérieur du code de chaque fonction.
-//
-// - L'unique fichier de code que vous soumettrez sera ce fichier Java, donc n'hésitez pas à le commenter abondamment.
-//   inutile d'exporter votre projet comme archive Zip et de rendre ce zip.
-//   Optionnel : vous pouvez aussi joindre un document PDF donnant des explications supplémentaires (si vous utilisez OpenOffice/LibreOffice/Word, exportez le document en PDF), avec éventuellement des captures d'écran montrant des étapes affichées dans la console
-//
-// - Regardez en ligne sur le Moodle pour le reste des consignes, et dans le fichier PDF du sujet du projet
-//   https://foad.univ-rennes1.fr/mod/assign/view.php?id=534254
-//
-// - A rendre avant le vendredi 04 décembre, maximum 23h59.
-//
-// - ATTENTION Le projet est assez long, ne commencez pas au dernier moment !
-//
-// - Enfin, n'hésitez pas à contacter l'équipe pédagogique, en posant une question sur le forum du Moodle, si quelque chose n'est pas clair.
-//
+// Rémi Cazoulat - IE Gr1 A CUPGE ESIR
+// Théo Le Goc - IE Gr1 A CUPGE ESIR
 
 // Pour utiliser des scanners pour lire des entrées depuis le clavier
 // utilisés en questions 4.d] pour la fonction jeu()
-import java.io.IOException;
-import java.util.InputMismatchException;
 import java.util.Scanner;
 
 // Pour la fonction entierAleatoire(a, b) que l'on vous donne ci-dessous
@@ -34,72 +12,73 @@ import java.util.concurrent.ThreadLocalRandom;
 public class projet_demineur {
 
 	// Donné, utile pour la question 1.b]
-	public static int entierAleatoire(int a, int b){
+	public static int entierAleatoire(int a, int b) {
 		// Renvoie un entier aléatoire uniforme entre a (inclus) et b (inclus).
-		return ThreadLocalRandom.current().nextInt(a, b-1);
+		return ThreadLocalRandom.current().nextInt(a, b - 1);
 	}
-
 
 	//
 	// Exercice 1 : Initialisation des tableaux
 	//
 
-	// Question 1.a] déclarez les variables globales T et Tadj ici
-	static int[][] T; //Tableau indiquant les cases révélées
-	static int[][] Tadj; //Tableau contenant la position des bombes
-	
-
+	// Question 1.a]
+	static int[][] T; // Tableau indiquant les cases révélées
+	static int[][] Tadj; // Tableau contenant la position des bombes
 
 	// Question 1.b] Fonction init
 	static void init(int hauteur, int largeur, int n) {
 
 		Tadj = new int[hauteur][largeur]; // initialisation de Tadj
 		T = new int[hauteur][largeur]; // initialisation de T
-		
-		for(int i = 0; i < n; i++) { //va placer des bombes aléatoirement dans Tadj
-			int bombeL = entierAleatoire(0, largeur+1);
-			int bombeH = entierAleatoire(0, hauteur+1);
-			if (Tadj[bombeH][bombeL] != -1) Tadj[bombeH][bombeL] = -1;	//Si pas de bombe, en pose une
-			else n++; //Sinon, augmente n (sinon on se retrouve avec 1 bombe en moins)
+
+		for (int i = 0; i < n; i++) { // va placer des bombes aléatoirement dans Tadj
+			int bombeL = entierAleatoire(0, largeur + 1);
+			int bombeH = entierAleatoire(0, hauteur + 1);
+			if (Tadj[bombeH][bombeL] != -1)
+				Tadj[bombeH][bombeL] = -1; // Si pas de bombe, en pose une
+			else
+				n++; // Sinon, augmente n (sinon on se retrouve avec 1 bombe en moins)
 		}
-		for ( int j = 0; j < hauteur; j ++) { //Initialise toutes les cases non égales à -1 à 0 (place des espaces vides là ou il n'y a pas de bombes)
-			for ( int k = 0; k < largeur; k ++) {
-				if (Tadj[j][k] != -1) Tadj[j][k]= 0;
+		for (int j = 0; j < hauteur; j++) { // Initialise toutes les cases non égales à -1 à 0 (place des espaces vides là ou il n'y a pas de bombes)
+			for (int k = 0; k < largeur; k++) {
+				if (Tadj[j][k] != -1)
+					Tadj[j][k] = 0;
 			}
 		}
 	}
 
-	
-	static void afficheTadj (int hauteur,int largeur) { //fonction qui va afficher Tabj (DEBUG)
-		for ( int j = 0; j < hauteur; j ++) { //Parcours toutes les cases
-			for ( int k = 0; k < largeur; k ++) {
+	static void afficheTadj(int hauteur, int largeur) { // fonction qui va afficher Tabj (DEBUG)
+		for (int j = 0; j < hauteur; j++) { // Parcours toutes les cases
+			for (int k = 0; k < largeur; k++) {
 
-				if (Tadj[j][k]!=-1) System.out.print(" "+Tadj[j][k]+" ");			
-				else System.out.print(Tadj[j][k]+" ");	
+				if (Tadj[j][k] != -1)
+					System.out.print(" " + Tadj[j][k] + " ");
+				else
+					System.out.print(Tadj[j][k] + " ");
 			}
 			System.out.println();
 		}
 	}
-	
-		
+
 	// Question 1.c] Fonction caseCorrecte
 	static boolean caseCorrecte(int i, int j) {
-		return i < Tadj.length && j < Tadj[0].length && i >= 0 && j >= 0; // rempli les conditions que i et j doivent etre compris entre 0 (inclu) et longueur ou largeur (non inclu)
+		return i < Tadj.length && j < Tadj[0].length && i >= 0 && j >= 0; // vérifie que la case existe
 	}
 
 	// Question 1.d] Fonction calculerAdjacent
 	static void calculerAdjacent() {
-		for ( int i = 0; i < Tadj.length; i++) {    				 //Parcours le tableau
-			for ( int j = 0; j< Tadj[0].length; j++) {
-				if (Tadj[i][j]!=-1) {								 //Vérifie que ce n'est pas une bombe
-					for (int k = i-1; k <= i+1; k++) {				 //Si c'en est pas une, parcours les cases adjacentes
-						for ( int z = j-1; z <= j+1; z++) {			 							
-							if ( caseCorrecte(k,z) && Tadj[k][z]== -1) Tadj[i][j]++; //Si la case est correcte, ajoute 1 à la case en question (car à côté d'une bombe)					
+		for (int i = 0; i < Tadj.length; i++) { // Parcours le tableau
+			for (int j = 0; j < Tadj[0].length; j++) {
+				if (Tadj[i][j] != -1) { // Vérifie que ce n'est pas une bombe
+					for (int k = i - 1; k <= i + 1; k++) { // Si c'en est pas une, parcours les cases adjacentes
+						for (int z = j - 1; z <= j + 1; z++) {
+							if (caseCorrecte(k, z) && Tadj[k][z] == -1)
+								Tadj[i][j]++; // Si la case est correcte, ajoute 1 à la case en question (car à côté d'une bombe)
 						}
-					}			
+					}
 				}
 			}
-		}		
+		}
 	}
 
 	//
@@ -108,132 +87,135 @@ public class projet_demineur {
 
 	// Question 2.a]
 	static void afficherGrille(boolean affMines) {
-		
-		//Affichage ligne 0 (LETTRES)
+
+		// Affichage ligne 0 (LETTRES)
 		int lettres = 65;
 		System.out.print("  |");
-		for ( int i = 0; i<T[0].length; i ++) {
-			if (i!=25 && i< 53) {
-				System.out.print((char)lettres+"|");
+		for (int i = 0; i < T[0].length; i++) {
+			if (i != 25 && i < 53) {
+				System.out.print((char) lettres + "|");
 				lettres++;
-			}
-			else if ( i == 25) {
-				System.out.print((char)lettres+"|");
+			} else if (i == 25) {
+				System.out.print((char) lettres + "|");
 				lettres = lettres + 7;
 			}
 		}
 
-		
 		System.out.println();
-		//Affichage lignes
+		// Affichage lignes
 		int unite = 0;
-		int dizaine = 0;	
-		
-		for (int i = 0; i < T.length; i++) {	//Pour chaque ligne
-			
-			if ( unite > 9) { //Update l'index de la ligne
+		int dizaine = 0;
+
+		for (int i = 0; i < T.length; i++) { // Pour chaque ligne
+
+			if (unite > 9) { // Update l'index de la ligne
 				unite = 0;
 				dizaine++;
 			}
 
-			System.out.print(dizaine+""+unite+"|"); //Affiche l'index de la ligne
+			System.out.print(dizaine + "" + unite + "|"); // Affiche l'index de la ligne
 			unite++;
 
-			//affiche le reste
-			for ( int j = 0; j < T[i].length; j++) { //Parcours les colonnes
-				
-				if (!affMines) { //Si les bombes ne doivent pas être révélées
-					if (T[i][j] == 0) System.out.print(" |"); //Si la case n'est pas révélée, affiche rien					
-					else if (T[i][j] == 1) { //Sinon
+			// affiche le reste
+			for (int j = 0; j < T[i].length; j++) { // Parcours les colonnes
 
-						if (Tadj[i][j] == -1) System.out.print("!|"); //Si la case est une bomb, l'affiche
-						
-						
-						else System.out.print(Tadj[i][j] +"|"); //Sinon affiche le contenu (Le nombre de bombes adjacentes)
-					} 
-					else System.out.print("X|");	//Sinon la case est marqué et affiche un X									
-				} 
-				else { //Si les bombes doivent être révélées.
-					if (Tadj[i][j] == -1) System.out.print("!|");  //Si la case est une bombe l'affiche
-					else System.out.print(Tadj[i][j] +"|"); //Sinon affiche son contenu (bombes adjacentes)
+				if (!affMines) { // Si les bombes ne doivent pas être révélées
+					if (T[i][j] == 0)
+						System.out.print(" |"); // Si la case n'est pas révélée, affiche rien
+					else if (T[i][j] == 1) { // Sinon
+
+						if (Tadj[i][j] == -1)
+							System.out.print("!|"); // Si la case est une bombe, l'affiche
+
+						else
+							System.out.print(Tadj[i][j] + "|"); // Sinon affiche le contenu (Le nombre de bombes adjacentes)
+					} else
+						System.out.print("X|"); // Sinon la case est marqué et affiche un X
+				} else { // Si les bombes doivent être révélées.
+					if (Tadj[i][j] == -1)
+						System.out.print("!|"); // Si la case est une bombe l'affiche
+					else
+						System.out.print(Tadj[i][j] + "|"); // Sinon affiche son contenu (bombes adjacentes)
 				}
 			}
-			System.out.println(); //Retourne à la ligne
-		}		
+			System.out.println(); // Retourne à la ligne
+		}
 	}
-
 
 	//
 	// Exercice 3 : Révéler une case
 	//
 
 	// Question 3.a]
-	static boolean caseAdjacenteZero(int i, int j) { // ATTENTION, vous devez modifier la signature de cette fonction
-		for (int k = i-1; k <= i+1; k++) {
-			for ( int z = j-1; z <= j+1; z++) { 
-				if ( caseCorrecte(k,z) && Tadj[k][z]== 0 && T[k][z]==1 &&(k!=i || z!=j)) {
+	static boolean caseAdjacenteZero(int i, int j) {
+		// Parcours les cases adjacentes
+		for (int k = i - 1; k <= i + 1; k++) {
+			for (int z = j - 1; z <= j + 1; z++) {
+				// Si la case est correcte, égale à zéro, revelée, et n'est pas celle du milieu,
+				// on retourne true.
+				if (caseCorrecte(k, z) && Tadj[k][z] == 0 && T[k][z] == 1 && (k != i || z != j)) {
 					return true;
-				}				
+				}
 			}
 		}
 		return false;
 	}
 
 	// Question 3.b]
-	static void revelation(int i, int j) { // ATTENTION, vous devez modifier la signature de cette fonction
-		T[i][j]=1;
+	static void revelation(int i, int j) {
+		T[i][j] = 1; // Avant tout il faut réveler la case, en mettant t[i][j] à 1
 		boolean b = true;
-		if (Tadj[i][j]==0) {
-			while(b) {
-				int c = 0;
-				for ( int n = 0; n < T.length; n ++) {
-					for ( int k = 0; k < T[0].length; k ++) {
-						if (caseAdjacenteZero(n,k) && T[n][k]==0) {
-							T[n][k]=1;
-							c++;						
-						}										
-					}				
+		if (Tadj[i][j] == 0) {
+			while (b) {
+				int c = 0; // cette entier va servir a determiner si le parcours de toute la grille aura révélé au moins une nouvelle case.
+				for (int n = 0; n < T.length; n++) { // on parcours la grille
+					for (int k = 0; k < T[0].length; k++) {
+						if (caseAdjacenteZero(n, k) && T[n][k] == 0) { // si une case n'est pas révélé et qu'elle possède une case adjacente
+																	   // qui n'a aucunes mines adjacentes,
+							T[n][k] = 1;// alors on revele la case
+							c++; // pour ne pas que la boucle while se stoppe
+						}
+					}
 				}
-				if ( c==0 )b = false;
-			}		
+				if (c == 0)
+					b = false; // condition pour stopper la boucle while
+			}
 		}
 	}
 
-
-	// Question 3.c] Optionnel
-	static void revelation2(int i, int j) { // ATTENTION, vous devez modifier la signature de cette fonction
-		T[i][j]=1;
-		if (Tadj[i][j]==0) {
-			for (int k = i-1; k <= i+1; k++) {
-				for ( int z = j-1; z <= j+1; z++) { 
-					if ( caseCorrecte(k,z)) {
-						T[k][z]=1;		
-						if (Tadj[k][z]==0 &&( k!=i || z!=j))revelation2(k, z);
-					}			
+	// Question 3.c] Optionnel NON FONCTIONNELLE
+	static void revelation2(int i, int j) {
+		T[i][j] = 1;
+		if (Tadj[i][j] == 0) {
+			for (int k = i - 1; k <= i + 1; k++) {
+				for (int z = j - 1; z <= j + 1; z++) {
+					if (caseCorrecte(k, z)) {
+						T[k][z] = 1;
+						if (Tadj[k][z] == 0 && (k != i || z != j))
+							revelation2(k, z);
+					}
 				}
-			}	
+			}
 		}
-		
-	
+
 	}
 
 	// Question 3.d]
-	static void actionDrapeau(int i, int j) { // ATTENTION, vous devez modifier la signature de cette fonction
-		if ( T[i][j]!=1) {
-			T[i][j] = T[i][j] == 2 ? 0 : 2;
-		}
-	}
-	
-	
-	// Question 3.e]
-	static boolean revelerCase(int i , int j) { // ATTENTION, vous devez modifier la signature de cette fonction
-		if( Tadj[i][j]==-1)return false;
-		else {
-			revelation(i,j);
-			return true;
+	static void actionDrapeau(int i, int j) {
+		if (T[i][j] != 1) { // Si la case n'est pas révélée
+			T[i][j] = T[i][j] == 2 ? 0 : 2; // Marque la case, sinon enlève le drapeau
 		}
 	}
 
+	// Question 3.e]
+	static boolean revelerCase(int i, int j) {
+		if (Tadj[i][j] == -1)
+			return false; // Si la case est une bombe, ne révèle pas la case
+		else {
+			revelation(i, j); // Révèle la case et les cases adjacentes aux cases révélés et qui n'ont pas de bombes adjacentes
+			return true; // La case a été révélée
+		}
+	}
 
 	//
 	// Exercice 4 : Boucle de jeu
@@ -241,121 +223,154 @@ public class projet_demineur {
 
 	// Question 4.a]
 	static boolean aGagne() {
-		for ( int i = 0; i < T.length; i++) {
-			for ( int j = 0; j< T[0].length; j++) {
-				if (Tadj[i][j] != -1 && T[i][j] != 1) return false;
+		// Pour toutes les cases
+		for (int i = 0; i < T.length; i++) {
+			for (int j = 0; j < T[0].length; j++) {
+				if (Tadj[i][j] != -1 && T[i][j] != 1)
+					return false; // Si une des cases à révéler ne l'est pas, le joueur n'a pas gagné
 			}
 		}
-		return true;
+		return true; // Toutes les cases sont révélées, le joueur à gagné
 	}
 
 	// Question 4.b]
-	static boolean verifierFormat( String s ) { // ATTENTION, vous devez modifier la signature de cette fonction
-		if ( s.compareTo("aide")==0)return true;
+	static boolean verifierFormat(String s) {
+
+		if (s.compareTo("aide") == 0)
+			return true; // Si la commande est aide, retourne ok
+
 		else {
-			if ( s.length()!=4)return false;
+			if (s.length() != 4)
+				return false; // Si la longueur n'est pas bonne (4)
 			else {
-				if ( s.charAt(0) != 'd' && s.charAt(0) != 'r' ) return false;	
-				else if ( s.charAt(1)!='0'&& s.charAt(1)!='1'&& s.charAt(1)!='2'&& s.charAt(1)!='3'&& s.charAt(1)!='4'&& s.charAt(1)!='5'&& s.charAt(1)!='6'&& s.charAt(1)!='7'&& s.charAt(1)!='8'&& s.charAt(1)!='9') return false;
-				else if ( s.charAt(2)!='0'&& s.charAt(2)!='1'&& s.charAt(2)!='2'&& s.charAt(2)!='3'&& s.charAt(2)!='4'&& s.charAt(2)!='5'&& s.charAt(2)!='6'&& s.charAt(2)!='7'&& s.charAt(2)!='8'&& s.charAt(2)!='9') return false;
-				else {
-					int lettres = 65;
-					for ( int i = 0; i < 52;i ++) {
-						if ( s.charAt(3)==(char)lettres)return true;
-						if (i!=25) lettres++;																	
-						else lettres=lettres + 7;																									
-					}			
+				// Si la premiere case n'est pas le nom de la fonction (r ou d)
+				if (s.charAt(0) != 'd' && s.charAt(0) != 'r')
 					return false;
-				}
-			}			
+				// Vérifie que les 2 charactères suivant sont des chiffres
+				else if (!(s.charAt(1) <= '9' && s.charAt(1) >= '1'))
+					return false;
+				else if (!(s.charAt(2) <= '9' && s.charAt(2) >= '1'))
+					return false;
+				// Vérifie que le dernier charactère est une lettre valide
+				else if (!(s.charAt(2) <= 'Z' && s.charAt(2) >= 'A' && s.charAt(2) <= 'z' && s.charAt(2) >= 'a'))
+					return false;
+			}
 		}
+
+		return true;
 	}
 
 	// Question 4.c]
-	 static int[] conversionCoordonnees(String input) { // ATTENTION, vous devez modifier la signature de cette fonction
-		int[]t = new int[3];
-		t[0] = Integer.parseInt(input.substring(1, 3));
-		int lettre = (int)input.charAt(3);
-		if (lettre >'Z')t[1] = lettre-71;
-		else t[1]=lettre-65;
-		if (input.charAt(0)=='d')t[2]=0;
-		else t[2]=1;
+	static int[] conversionCoordonnees(String input) {
+		int[] t = new int[3];// créé un nouveau tableau qui contiendra l'action, et les coordonnés d'une case
+		t[0] = Integer.parseInt(input.substring(1, 3));// on récupère les coordonnées de la ligne ( qui sont toujours deux nombres, d'ou cette ligne)
+		int lettre = (int) input.charAt(3); // on transforme le 4eme caractère de la saisie du joueur en un entier
+		// puis on le convertit en coordonnées valides ( en enlevant 65 si c'est une lettre maj ou 71 si c'est une lettre min)
+
+
+		if (lettre > 'Z')
+			t[1] = lettre - 71;
+		else
+			t[1] = lettre - 65;
+			
+		// on remplit la 3eme case avec l'action à faire, c'est à dire soit mettre un drapeau soit révéler la case.
+		if (input.charAt(0) == 'd')
+			t[2] = 0;
+		else
+			t[2] = 1;
 		return t;
 	}
 
 	// Question 4.d]
 	static void jeu() {
+
+		// Initialise le scanner
 		Scanner sc = new Scanner(System.in);
+
+		// Variable maintenant la boucle
 		boolean pasPerdu = true;
-		while (pasPerdu) {	
+
+		while (pasPerdu) {
+
+			// Si le joueur à gagné, arrête la boucle
 			if (aGagne()) {
 				pasPerdu = false;
 				break;
 			}
+
+			// Affiche la grile (sans les bombes)
 			afficherGrille(false);
+
 			System.out.print("entrez votre action et/ou vos coordonnées : ");
-			String coord = sc.nextLine();		
+			String coord = sc.nextLine(); // Scanne l'action
+
+			// Tant que les coordonnées ne sont pas correctes
 			while (!verifierFormat(coord)) {
 				System.out.print("ré entrez votre action et/ou vos coordonnées, (elles sont fausses): ");
 				coord = sc.nextLine();
 			}
-			if ( coord.compareTo("aide")==0){
-				aide();
-			}
-			else {
-				int[]coord2 = conversionCoordonnees(coord);
-				if (coord2[2]==0) {
-					actionDrapeau(coord2[0],coord2[1]);
-					T[coord2[0]][coord2[1]] = 2;
-					
+
+			// Si l'action est "aide"
+			if (coord.compareTo("aide") == 0) {
+				aide(); // Demande de l'aide
+			} else { // Sinon
+				int[] coord2 = conversionCoordonnees(coord); // Convertis les coordonnées
+				if (coord2[2] == 0) { // Action drapeau
+					actionDrapeau(coord2[0], coord2[1]);
+				} else { // Action réveler (vérifie si on révèle pas une mauvaise case)
+					pasPerdu = revelerCase(coord2[0], coord2[1]);
 				}
-				else {					
-					pasPerdu = revelerCase(coord2[0],coord2[1]);
-				}							
 			}
-		}	
-		if(aGagne()) {
+		}
+
+		// Quand la boucle est fini (perdu ou gagné)
+		// On vérifie si le joueur à gagné ou non
+		if (aGagne()) {
 			afficherGrille(false);
 			System.out.print("vous avez gagné");
-		}
-		else {
+		} else {
 			afficherGrille(true);
 			System.out.print("vous avez perdu");
 		}
+
+		// Ferme le scanner
 		sc.close();
-		
-		
 	}
 
 	// Question 4.e]
 	// Votre *unique* méthode main
 	public static void main(String[] args) {
+		// Initialise le scanner qui servira à la création de la partie
 		Scanner scanner = new Scanner(System.in);
 
-		System.out.print("entrez une largeur : "); 
+
+
+		System.out.print("entrez une largeur : ");
 		int largeur = 0;
 
-		//Essaye de récupérer le nombre (on utilise ici next line afin d'éviter un bug de "selfread" du à nextInt)
+		// Essaye de récupérer le nombre (on utilise ici next line afin d'éviter un bug de "selfread" du à nextInt)
 		try {
-			largeur = Integer.parseInt(scanner.nextLine());  //Si on arrive pas à parser, ce n'est pas un nombre. largeur est donc égal à 0
+			largeur = Integer.parseInt(scanner.nextLine()); // Si on arrive pas à parser, ce n'est pas un nombre. largeur est donc égal à 0
 		} catch (Exception e) {}
 
-		//Même chose que précedemment, en boucle tant que la valeur n'est pas correctement définie
-		while (largeur>52||largeur<1) {
-				System.out.println("ré-entrez une largeur, votre valeur n'est pas correcte ( entre 1 et 52 inclus). : ");
-				try {
-					largeur = Integer.parseInt(scanner.nextLine());
-				} catch (Exception e) {}
+		// Même chose que précedemment, en boucle tant que la valeur n'est pas correctement définie
+		while (largeur > 52 || largeur < 1) {
+			System.out.println("ré-entrez une largeur, votre valeur n'est pas correcte ( entre 1 et 52 inclus). : ");
+			try {
+				largeur = Integer.parseInt(scanner.nextLine());
+			} catch (Exception e) {}
 		}
+
 
 
 		System.out.print("entrez une hauteur : ");
 		int hauteur = 0;
 		try {
-			hauteur = Integer.parseInt(scanner.nextLine());  //Si on arrive pas à parser, ce n'est pas un nombre. largeur est donc égal à 0
+			hauteur = Integer.parseInt(scanner.nextLine()); // Si on arrive pas à parser, ce n'est pas un nombre. largeur est donc égal à 0
 		} catch (Exception e) {}
 
-		while (hauteur>100||hauteur<1) {
+		// Même chose que précedemment, en boucle tant que la valeur n'est pas correctement définie
+		while (hauteur > 100 || hauteur < 1) {
 			System.out.println("ré-entrez une hauteur, votre valeur n'est pas correcte ( entre 1 et 100 inclus). : ");
 			try {
 				hauteur = Integer.parseInt(scanner.nextLine());
@@ -363,30 +378,36 @@ public class projet_demineur {
 		}
 
 
+
 		System.out.print("entrez le nombre de mines : ");
 		int n = 0;
 		try {
-			n = Integer.parseInt(scanner.nextLine());  //Si on arrive pas à parser, ce n'est pas un nombre. largeur est donc égal à 0
+			n = Integer.parseInt(scanner.nextLine()); // Si on arrive pas à parser, ce n'est pas un nombre. largeur est donc égal à 0
 		} catch (Exception e) {}
 
-		while ( n>hauteur*largeur||n<1) {
-			System.out.print("ré-entrez le nombre de mines. Il doit etre compris entre 1 et "+largeur*hauteur+" inclus. : ");
+		// Même chose que précedemment, en boucle tant que la valeur n'est pas
+		// correctement définie
+		while (n > hauteur * largeur || n < 1) {
+			System.out.print("ré-entrez le nombre de mines. Il doit etre compris entre 1 et " + largeur * hauteur + " inclus. : ");
 			try {
 				n = Integer.parseInt(scanner.nextLine());
-			} catch (Exception e) {}
-		}		
+			} catch (Exception e) {
+			}
+		}
 
-
-		init (hauteur, largeur, n);
+		// Initialise le jeu
+		init(hauteur, largeur, n);
+		// Calcule les cases
 		calculerAdjacent();
-		System.out.println("Action : r ( revele ), d ( met un drapeau). Coordonnées : lignes( 00,01,02,...), colonnes ( A,B,C...z)");
-		jeu();		
-		scanner.close();
-		
-		
-		
-	}
 
+		// Affiche le formattage des actions
+		System.out.println("Action : r ( revele ), d ( met un drapeau). Coordonnées : lignes( 00,01,02,...), colonnes ( A,B,C...z)");
+		scanner.close();
+
+		// Lance le jeu
+		jeu();
+
+	}
 
 	//
 	// Exercice 5 bonus challenge : Pour aller plus loin
@@ -394,32 +415,35 @@ public class projet_demineur {
 
 	// Question 5.a] Optionnel
 	static void aide() {
-		for (int i = 0; i<T.length; i ++){
-			for ( int j = 0; j<T[0].length; i++ ){
+		for (int i = 0; i < T.length; i++) {
+			for (int j = 0; j < T[0].length; i++) {
 				if (T[i][j] == 1) {
 					int caseRev = 0;
 					int caseAdj = 0;
-					for (int k = i-1; k <= i+1; k++) {
-						for ( int z = j-1; z <= j+1; z++) {
-							if ( caseCorrecte(k,z) && k!=i && z!=j){
+					for (int k = i - 1; k <= i + 1; k++) {
+						for (int z = j - 1; z <= j + 1; z++) {
+							if (caseCorrecte(k, z) && k != i && z != j) {
 								caseAdj++;
-								if(T[k][z]==1 ){
+								if (T[k][z] == 1) {
 									caseRev++;
-								}
-							}  	
-						}
-					}
-					if (Tadj[i][j]==caseAdj-caseRev) {
-						for (int k = i-1; k <= i+1; k++) {
-							for ( int z = j-1; z <= j+1; z++) {
-								if (caseCorrecte(k,z)&&T[k][z]==0){
-									char tmp;
-									if ( (char)z <=25)tmp = (char)(z+65);
-									else tmp = (char)(z+71);
-									System.out.println("la case "+k+tmp+" est probablement une bombe");
 								}
 							}
 						}
+					}
+					if (Tadj[i][j] == caseAdj - caseRev) {
+						for (int k = i - 1; k <= i + 1; k++) {
+							for (int z = j - 1; z <= j + 1; z++) {
+								if (caseCorrecte(k, z) && T[k][z] == 0) {
+									char tmp;
+									if ((char) z <= 25)
+										tmp = (char) (z + 65);
+									else
+										tmp = (char) (z + 71);
+									System.out.println("la case " + k + tmp + " est probablement une bombe");
+								}
+							}
+						}
+						return;
 					}
 				}
 			}
@@ -429,11 +453,11 @@ public class projet_demineur {
 
 	// Question 5.b] Optionnel
 	public static void intelligenceArtificielle() {
-		
+
 	}
 
 	// Question 5.c] Optionnel
 	public static void statistiquesVictoiresIA() {
-		
+
 	}
 }
