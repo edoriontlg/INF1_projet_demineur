@@ -3,8 +3,7 @@
 
 //
 //
-//NE PAS UTILISER AIDE, N'EST PAS FONCTIONELLE ET APPORTE DES ERREURS !
-//Nous l'avons laissé dans le code afin que vous voyez nos avancement tout de même
+//
 //
 //
 
@@ -325,10 +324,12 @@ public class projet_demineur {
 			if ( coord.compareTo("aide")==0)aide();
 			else{	
 				coordtmp = conversionCoordonnees(coord); //passe les coordonnées entrées sous format int
-				while ( !caseCorrecte(coordtmp[0],coordtmp[1])&&!verifierFormat(coord)){
+				caseOK = caseCorrecte(coordtmp[0],coordtmp[1]);
+				while (!caseOK &&!verifierFormat(coord)){
 					System.out.print("re entrez votre action et/ou vos coordonnées, elles sont en dehors du tableau : ");
 					coord = sc.nextLine();
 					coordtmp = conversionCoordonnees(coord);
+					caseOK = caseCorrecte(coordtmp[0],coordtmp[1]);
 				}
 				if (coordtmp[2] == 0) { //on verifie quelle  action il faut faire ( ici celle du drapeau )
 				actionDrapeau(coordtmp[0], coordtmp[1]);
@@ -447,6 +448,7 @@ public class projet_demineur {
 	//
 
 	// Question 5.a] Optionnel
+	//fonctionnelle
 	static void aide() {
 		for (int i = 0; i < T.length; i++) {
 			for (int j = 0; j < T[0].length; j++) {
@@ -488,8 +490,10 @@ public class projet_demineur {
 	}
 
 	// Question 5.b] Optionnel
+	// /!\ pas fonctionnelle /!\
 	public static void intelligenceArtificielle() {
 		boolean victoireDefaite = false;
+		int reveleAle = 0;
 		int coord1 = entierAleatoire(0, T.length + 1);
 		int coord2= entierAleatoire(0, T[0].length + 1);
 		
@@ -505,6 +509,7 @@ public class projet_demineur {
 				revelation(coord1,coord2);
 		}
 		while (!victoireDefaite){
+			reveleAle = 0;
 			afficherGrille(false);
 			System.out.println();
 			for (int i = 0; i < T.length; i++) {
@@ -512,21 +517,44 @@ public class projet_demineur {
 					if (T[i][j] == revele) {
 						int caseRev = 0;
 						int caseAdj = 0;
+						int caseDra = 0;
 						for (int k = i - 1; k <= i + 1; k++) {
 							for (int z = j - 1; z <= j + 1; z++) {
 								if (caseCorrecte(k, z) && (k != i || z != j)) {
 									caseAdj++;
-									if (T[k][z] == revele|| T[k][z] == drapeau) {
+									if (T[k][z] == revele ){ 
 										caseRev++;
 									}
+									else if (T[k][z] == drapeau) {
+										caseDra++;
+									}	
 								}
 							}
 						}
-						if (Tadj[i][j] == (caseAdj - caseRev) && Tadj[i][j]!=0) {
+						if(Tadj[i][j] == caseDra && caseRev!=0){
 							for (int k = i - 1; k <= i + 1; k++) {
 								for (int z = j - 1; z <= j + 1; z++) {
 									if (caseCorrecte(k, z) && T[k][z] == pasRevele) {
 										T[k][z]=revele;
+										reveleAle++;
+										System.out.println(" k : "+k+" z : "+z);
+										if (Tadj[k][z]==-1){
+											victoireDefaite = true;
+										}
+									}	
+								}
+							}		
+						}
+						if (Tadj[i][j] == (caseAdj - caseRev - caseDra) && Tadj[i][j]!=0 && Tadj[i][j]>caseDra) {
+							for (int k = i - 1; k <= i + 1; k++) {
+								for (int z = j - 1; z <= j + 1; z++) {
+									if (caseCorrecte(k, z) && T[k][z] == pasRevele) {
+										T[k][z]=drapeau;
+										reveleAle++;
+										System.out.println(" k : "+k+" z : "+z);
+										if (Tadj[k][z]==-1){
+											victoireDefaite = true;
+										}
 									}
 								}
 							}
@@ -534,19 +562,20 @@ public class projet_demineur {
 					}
 				}
 			}
-		
-			coord1 = entierAleatoire(0, T.length + 1);
-			coord2= entierAleatoire(0, T[0].length + 1);
-			while (T[coord1][coord2] ==1 || T[coord1][coord2]== 2){
+			if (reveleAle == 0){
 				coord1 = entierAleatoire(0, T.length + 1);
-				coord2 = entierAleatoire(0, T[0].length + 1);
-			}
-			T[coord1][coord2] = revele;
-			if (Tadj[coord1][coord2]==-1){
-				victoireDefaite = false;
-			}
-			else {
-				revelation(coord1,coord2);						
+				coord2= entierAleatoire(0, T[0].length + 1);
+				while (T[coord1][coord2] ==1 || T[coord1][coord2]== 2){
+					coord1 = entierAleatoire(0, T.length + 1);
+					coord2 = entierAleatoire(0, T[0].length + 1);
+				}
+				T[coord1][coord2] = revele;
+				if (Tadj[coord1][coord2]==-1){
+					victoireDefaite = true;
+				}
+				else {
+					revelation(coord1,coord2);
+				}						
 			}
 		}
 		
