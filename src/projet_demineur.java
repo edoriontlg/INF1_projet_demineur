@@ -1,6 +1,13 @@
 // Remi Cazoulat - IE Gr1 A CUPGE ESIR
 // Theo Le Goc - IE Gr1 A CUPGE ESIR
 
+//
+//
+//NE PAS UTILISER AIDE, N'EST PAS FONCTIONELLE ET APPORTE DES ERREURS !
+//Nous l'avons laissé dans le code afin que vous voyez nos avancement tout de mêm
+//
+//
+
 // Pour utiliser des scanners pour lire des entrees depuis le clavier
 // utilises en questions 4.d] pour la fonction jeu()
 import java.util.Scanner;
@@ -237,7 +244,7 @@ public class projet_demineur {
 	static boolean verifierFormat(String s) {
 
 		if (s.compareTo("aide") == 0)
-			return true; // Si la commande est aide, retourne ok
+			return false; // Si la commande est aide, retourne ok
 
 		else {
 			if (s.length() != 4)
@@ -308,7 +315,7 @@ public class projet_demineur {
 
 			// Tant que les coordonnees ne sont pas correctes
 			while (!verifierFormat(coord)) {
-				System.out.println("re entrez votre action et/ou vos coordonnees, (elles sont fausses): ");
+				System.out.print("re entrez votre action et/ou vos coordonnees, (elles sont fausses): ");
 				coord = sc.nextLine();
 			}
 
@@ -357,7 +364,7 @@ public class projet_demineur {
 
 		// Même chose que precedemment, en boucle tant que la valeur n'est pas correctement definie
 		while (largeur > 52 || largeur < 1) {
-			System.out.println("re-entrez une largeur, votre valeur n'est pas correcte ( entre 1 et 52 inclus). : ");
+			System.out.print("re-entrez une largeur, votre valeur n'est pas correcte ( entre 1 et 52 inclus). : ");
 			try {
 				largeur = Integer.parseInt(scanner.nextLine());
 			} catch (Exception e) {}
@@ -373,7 +380,7 @@ public class projet_demineur {
 
 		// Même chose que precedemment, en boucle tant que la valeur n'est pas correctement definie
 		while (hauteur > 100 || hauteur < 1) {
-			System.out.println("re-entrez une hauteur, votre valeur n'est pas correcte ( entre 1 et 100 inclus). : ");
+			System.out.print("re-entrez une hauteur, votre valeur n'est pas correcte ( entre 1 et 100 inclus). : ");
 			try {
 				hauteur = Integer.parseInt(scanner.nextLine());
 			} catch (Exception e) {}
