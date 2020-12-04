@@ -244,7 +244,7 @@ public class projet_demineur {
 	static boolean verifierFormat(String s) {
 
 		if (s.compareTo("aide") == 0)
-			return false; // Si la commande est aide, retourne ok
+			return false; // Si la commande est aide, retourne ok (ICI RETOURNE FAUX CAR FONCTION AIDE DESACTIVEE, pour cause de bugs)
 
 		else {
 			if (s.length() != 4)
