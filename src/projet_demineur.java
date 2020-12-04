@@ -438,9 +438,4 @@ public class projet_demineur {
 	public static void statistiquesVictoiresIA() {
 		
 	}
-
-
-	// As taken from
-    // https://stackoverflow.com/questions/2979383/java-clear-the-console
-
 }
