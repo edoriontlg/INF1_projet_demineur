@@ -398,29 +398,30 @@ public class projet_demineur {
 	static void aide() {
 		for (int i = 0; i<T.length; i ++){
 			for ( int j = 0; j<T[0].length; i++ ){
-				if (T[i][j]==1){
-					int caseR = 0;
+				if (T[i][j] == 1) {
+					int caseRev = 0;
 					int caseAdj = 0;
 					for (int k = i-1; k <= i+1; k++) {
 						for ( int z = j-1; z <= j+1; z++) {
-							if ( caseCorrecte(k,z)){
+							if ( caseCorrecte(k,z) && k!=i && z!=j){
 								caseAdj++;
-								if(T[k][z]==1 && k!=i && z!=j){
-									caseR++;
+								if(T[k][z]==1 ){
+									caseRev++;
 								}
 							}  	
-
 						}
 					}
-					if (Tadj[i][j]==caseAdj-caseR) {
+					if (Tadj[i][j]==caseAdj-caseRev) {
 						for (int k = i-1; k <= i+1; k++) {
 							for ( int z = j-1; z <= j+1; z++) {
 								if (caseCorrecte(k,z)&&T[k][z]==0){
-									T[k][z]=2;
+									char tmp;
+									if ( (char)z <=25)tmp = (char)(z+65);
+									else tmp = (char)(z+71);
+									System.out.println("la case "+k+tmp+" est probablement une bombe");
 								}
 							}
 						}
-						return;
 					}
 				}
 			}
