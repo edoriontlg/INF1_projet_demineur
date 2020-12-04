@@ -377,7 +377,6 @@ public class projet_demineur {
 	public static void main(String[] args) {
 		// Initialise le scanner qui servira à la creation de la partie
 		Scanner scanner = new Scanner(System.in);
-
 		System.out.print("entrez une largeur : ");
 		int largeur = 0;
 
